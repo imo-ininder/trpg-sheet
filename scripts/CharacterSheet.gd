@@ -20,6 +20,7 @@ var _hp_inputs: Dictionary = {}
 var _mp_inputs: Dictionary = {}
 var _equip_inputs: Dictionary = {}      # slot_name -> OptionButton
 var _skill_rows: Dictionary = {}        # cat -> Array of {name, diff, level LineEdit}
+var _skill_scrolls: Dictionary = {}     # cat -> ScrollContainer（用於動態調整高度）
 var _currency_display: Label            # 頂部貨幣顯示標籤（唯讀）
 var _name_edit: LineEdit
 var _race_edit: LineEdit
@@ -27,6 +28,11 @@ var _class_edit: LineEdit
 var _age_edit: LineEdit
 var _align_edit: LineEdit
 var _cp_edit: LineEdit
+
+# 技能列常數
+const SKILL_ROW_HEIGHT = 30  # 每行高度（28px + 2px separation）
+const SKILL_HEADER_HEIGHT = 70  # 標題 + 標頭 + spacing
+const SKILL_DEFAULT_ROWS = 10  # 預設行數
 
 # ── 建立 UI ──────────────────────────────────────
 func _ready() -> void:
@@ -575,8 +581,12 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	# 不設定固定高度，讓它根據視窗大小動態調整
+	# 設定初始最小高度 = 預設 10 行
+	scroll.custom_minimum_size.y = SKILL_DEFAULT_ROWS * SKILL_ROW_HEIGHT
 	vb.add_child(scroll)
+
+	# 儲存 scroll 參考，用於動態調整高度
+	_skill_scrolls[cat] = scroll
 
 	var rows_vb = VBoxContainer.new()
 	rows_vb.add_theme_constant_override("separation", 2)
@@ -589,7 +599,7 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	_skill_rows[cat] = []
 
 	# 預設 10 列
-	for _i in range(10):
+	for _i in range(SKILL_DEFAULT_ROWS):
 		_add_skill_row(cat, rows_vb)
 
 	# 直接 lambda，cat / rows_vb 是函式參數，在各自 stack frame 中固定，不受閉包捕獲問題影響
@@ -624,11 +634,41 @@ func _add_skill_row(cat: String, container: VBoxContainer) -> void:
 	del_btn.pressed.connect(func():
 		_skill_rows[cat].erase(row_entry)
 		row.queue_free()
+		# 刪除後也要更新高度
+		_update_skill_scroll_height(cat)
 	)
 	row.add_child(del_btn)
 
 	_skill_rows[cat].append(row_entry)
 	container.add_child(row)
+
+	# 動態調整 ScrollContainer 最小高度
+	_update_skill_scroll_height(cat)
+
+# ── 動態調整技能 ScrollContainer 高度 ─────────────
+func _update_skill_scroll_height(cat: String) -> void:
+	if not _skill_scrolls.has(cat):
+		return
+
+	var scroll = _skill_scrolls[cat]
+	var row_count = _skill_rows[cat].size()
+	var needed_height = row_count * SKILL_ROW_HEIGHT
+
+	# 取得 skill_row 的可用高度
+	# 因為 panel 的父容器是 skill_row 的 HBoxContainer，它設定了 SIZE_EXPAND_FILL
+	# 在 _ready 之後才能取得實際高度，所以這裡使用 deferred call
+	await get_tree().process_frame
+
+	var panel = scroll.get_parent().get_parent()  # scroll -> vb -> panel
+	var available_height = panel.size.y - SKILL_HEADER_HEIGHT
+
+	# 如果需要的高度小於可用高度，就設定為需要的高度
+	# 如果需要的高度大於可用高度，就設定為可用高度（會出現捲軸）
+	if available_height > 0:
+		scroll.custom_minimum_size.y = min(needed_height, available_height)
+	else:
+		# 初始化階段，先設定為需要的高度
+		scroll.custom_minimum_size.y = needed_height
 
 # ── 計算邏輯 ──────────────────────────────────────
 func _recalc_attr(attr: String) -> void:
