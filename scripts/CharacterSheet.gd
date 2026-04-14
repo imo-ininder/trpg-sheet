@@ -134,14 +134,14 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	_build_resists_section(col2)
 	_build_soul_stats_section(col2)
 
-	# 欄 3：戰鬥數值 + 物理/元素抗性 + HP/MP
+	# 欄 3：HP/MP + 物理/元素抗性 + 戰鬥數值
 	var col3 = VBoxContainer.new()
 	col3.add_theme_constant_override("separation", 8)
 	col3.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(col3)
-	_build_combat(col3)
-	_build_phys_elem_resist(col3)
 	_build_resources(col3)
+	_build_phys_elem_resist(col3)
+	_build_combat(col3)
 
 	# 欄 4：裝備（2 欄 × 10 行）
 	var col4 = _make_panel()
@@ -705,9 +705,9 @@ func _build_equip(panel: PanelContainer) -> void:
 		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		item_vb.add_child(hbox)
 
-		# 槽位名稱（左側，更大）
+		# 槽位名稱（左側，更大，加左側 margin）
 		var lbl = Label.new()
-		lbl.text = slot
+		lbl.text = "  " + slot  # 加兩個空格作為左側 margin
 		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 11)
 		lbl.custom_minimum_size.x = 90
@@ -723,8 +723,10 @@ func _build_equip(panel: PanelContainer) -> void:
 		_equip_inputs[slot] = opt
 		hbox.add_child(opt)
 
-		# 分隔線（不是最後一個才加）
-		if i < all_slots.size() - 1:
+		# 分隔線（不是最後兩個才加，因為是 2 欄排列）
+		# 每欄有 10 行，所以索引 9 和 19 是每欄的最後一個，不加線
+		var col_idx = i % 10  # 在該欄的索引
+		if col_idx < 9:  # 不是該欄的最後一個
 			var sep = HSeparator.new()
 			item_vb.add_child(sep)
 
