@@ -118,14 +118,21 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	_build_attrs(col1)
 	hbox.add_child(col1)
 
-	# 欄 2：複合/抗性/強韌精神靈魂
+	# 欄 2：複合/抗性/強韌精神靈魂（包裝在 Panel 內並填滿高度）
+	var col2_panel = _make_panel()
+	col2_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col2_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hbox.add_child(col2_panel)
+
 	var col2 = VBoxContainer.new()
 	col2.add_theme_constant_override("separation", 8)
 	col2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(col2)
-	_build_compound(col2)
-	_build_resists(col2)
-	_build_soul_stats(col2)
+	col2.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	col2_panel.add_child(col2)
+
+	_build_compound_section(col2)
+	_build_resists_section(col2)
+	_build_soul_stats_section(col2)
 
 	# 欄 3：戰鬥數值 + 物理/元素抗性 + HP/MP
 	var col3 = VBoxContainer.new()
@@ -253,6 +260,59 @@ func _build_compound(parent: VBoxContainer) -> void:
 
 		grid.add_child(card)
 
+# ── 技能複合判定 Section（帶標題）────────────────────
+func _build_compound_section(parent: VBoxContainer) -> void:
+	var section_vb = VBoxContainer.new()
+	section_vb.add_theme_constant_override("separation", 4)
+	section_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(section_vb)
+
+	# 標題
+	var title_lbl = Label.new()
+	title_lbl.text = "技能複合判定"
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_lbl.add_theme_font_size_override("font_size", 13)
+	section_vb.add_child(title_lbl)
+
+	# 分隔線
+	var sep = HSeparator.new()
+	section_vb.add_child(sep)
+
+	# 內容：使用原本的 _build_compound，但不包 panel
+	var grid = GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	section_vb.add_child(grid)
+
+	for name in CharacterData.COMPOUND_NAMES:
+		_compound_hidden[name + "_adj"]  = 0
+		_compound_hidden[name + "_temp"] = 0
+
+		var card = PanelContainer.new()
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		var card_vb = VBoxContainer.new()
+		card_vb.add_theme_constant_override("separation", 2)
+		card.add_child(card_vb)
+
+		var name_lbl = Label.new()
+		name_lbl.text = name
+		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_lbl.add_theme_font_size_override("font_size", 11)
+		card_vb.add_child(name_lbl)
+
+		var total_lbl = Label.new()
+		total_lbl.text = "39"
+		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		total_lbl.add_theme_font_size_override("font_size", 18)
+		_compound_totals[name] = total_lbl
+		card_vb.add_child(total_lbl)
+
+		grid.add_child(card)
+
 # ── 抗性數值（卡片式 3×2）────────────────────────────
 func _build_resists(parent: VBoxContainer) -> void:
 	var panel = _make_panel()
@@ -272,6 +332,59 @@ func _build_resists(parent: VBoxContainer) -> void:
 
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var card_vb = VBoxContainer.new()
+		card_vb.add_theme_constant_override("separation", 2)
+		card.add_child(card_vb)
+
+		var name_lbl = Label.new()
+		name_lbl.text = name
+		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_lbl.add_theme_font_size_override("font_size", 11)
+		card_vb.add_child(name_lbl)
+
+		var total_lbl = Label.new()
+		total_lbl.text = "26"
+		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		total_lbl.add_theme_font_size_override("font_size", 18)
+		_resist_totals[name] = total_lbl
+		card_vb.add_child(total_lbl)
+
+		grid.add_child(card)
+
+# ── 主要抗性 Section（帶標題）────────────────────────
+func _build_resists_section(parent: VBoxContainer) -> void:
+	var section_vb = VBoxContainer.new()
+	section_vb.add_theme_constant_override("separation", 4)
+	section_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(section_vb)
+
+	# 標題
+	var title_lbl = Label.new()
+	title_lbl.text = "主要抗性"
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_lbl.add_theme_font_size_override("font_size", 13)
+	section_vb.add_child(title_lbl)
+
+	# 分隔線
+	var sep = HSeparator.new()
+	section_vb.add_child(sep)
+
+	# 內容
+	var grid = GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	section_vb.add_child(grid)
+
+	for name in CharacterData.RESIST_NAMES:
+		_resist_hidden[name + "_adj"]  = 0
+		_resist_hidden[name + "_temp"] = 0
+
+		var card = PanelContainer.new()
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		var card_vb = VBoxContainer.new()
 		card_vb.add_theme_constant_override("separation", 2)
 		card.add_child(card_vb)
@@ -492,6 +605,62 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 18)
 		_soul_labels[name] = lbl
+		card_vb.add_child(lbl)
+
+		grid.add_child(card)
+
+# ── 特殊抗性 Section（帶標題）────────────────────────
+func _build_soul_stats_section(parent: VBoxContainer) -> void:
+	var section_vb = VBoxContainer.new()
+	section_vb.add_theme_constant_override("separation", 4)
+	section_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	section_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(section_vb)
+
+	# 標題
+	var title_lbl = Label.new()
+	title_lbl.text = "特殊抗性"
+	title_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_lbl.add_theme_font_size_override("font_size", 13)
+	section_vb.add_child(title_lbl)
+
+	# 分隔線
+	var sep = HSeparator.new()
+	section_vb.add_child(sep)
+
+	# 內容
+	var grid = GridContainer.new()
+	grid.columns = 3
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	section_vb.add_child(grid)
+
+	for pair in [["強韌", "65"], ["精神", "65"], ["靈魂", "65"]]:
+		var name      = pair[0]
+		var default_v = pair[1]
+
+		var card = PanelContainer.new()
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		var card_vb = VBoxContainer.new()
+		card_vb.add_theme_constant_override("separation", 2)
+		card.add_child(card_vb)
+
+		var name_lbl = Label.new()
+		name_lbl.text = name
+		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_lbl.add_theme_font_size_override("font_size", 12)
+		card_vb.add_child(name_lbl)
+
+		# 大數字唯讀顯示
+		var lbl = Label.new()
+		lbl.text = default_v
+		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 18)
+		_soul_labels[name] = lbl
+		lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		card_vb.add_child(lbl)
 
 		grid.add_child(card)
