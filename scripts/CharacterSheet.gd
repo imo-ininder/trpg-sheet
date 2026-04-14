@@ -675,44 +675,62 @@ func _build_soul_stats_section(parent: VBoxContainer) -> void:
 # ── 裝備欄位（10×2 網格佈局，含 12 個主要 + 8 個擴充槽位）────
 func _build_equip(panel: PanelContainer) -> void:
 	var vb = _panel_vbox(panel, "裝備")
-
-	# GridContainer：2 欄 × 10 行
-	var grid = GridContainer.new()
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 12)
-	grid.add_theme_constant_override("v_separation", 4)
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vb.add_child(grid)
+	vb.add_theme_constant_override("separation", 0)
 
 	# 合併所有槽位（12 個主要 + 8 個擴充）
 	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 
-	for slot in all_slots:
-		var hbox = HBoxContainer.new()
-		hbox.add_theme_constant_override("separation", 6)
-		hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	# 用 VBoxContainer 包裝兩欄，讓我們可以加分隔線
+	var columns_hb = HBoxContainer.new()
+	columns_hb.add_theme_constant_override("separation", 12)
+	columns_hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns_hb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vb.add_child(columns_hb)
 
-		# 槽位名稱標籤（左側）
-		var lbl = Label.new()
-		lbl.text = slot
-		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 10)
-		lbl.custom_minimum_size.x = 90
-		hbox.add_child(lbl)
+	# 左右兩欄
+	for col_idx in range(2):
+		var col_vb = VBoxContainer.new()
+		col_vb.add_theme_constant_override("separation", 0)
+		col_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		col_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		columns_hb.add_child(col_vb)
 
-		# 裝備選擇下拉選單（右側，文字置中）
-		var opt = OptionButton.new()
-		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		opt.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		opt.add_item("（空）")
-		opt.add_theme_font_size_override("font_size", 10)
-		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_equip_inputs[slot] = opt
-		hbox.add_child(opt)
+		# 每欄 10 個槽位
+		for row_idx in range(10):
+			var slot_idx = col_idx * 10 + row_idx
+			if slot_idx >= all_slots.size():
+				break
 
-		grid.add_child(hbox)
+			var slot = all_slots[slot_idx]
+
+			# 每個裝備項目
+			var item_vb = VBoxContainer.new()
+			item_vb.add_theme_constant_override("separation", 3)
+			item_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			item_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			col_vb.add_child(item_vb)
+
+			# 槽位名稱（更大）
+			var lbl = Label.new()
+			lbl.text = slot
+			lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			lbl.add_theme_font_size_override("font_size", 11)
+			item_vb.add_child(lbl)
+
+			# 裝備選擇下拉選單（縮小高度）
+			var opt = OptionButton.new()
+			opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			opt.add_item("（空）")
+			opt.add_theme_font_size_override("font_size", 10)
+			opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			opt.custom_minimum_size.y = 24
+			_equip_inputs[slot] = opt
+			item_vb.add_child(opt)
+
+			# 分隔線（除了最後一個）
+			if row_idx < 9 and slot_idx < all_slots.size() - 1:
+				var sep = HSeparator.new()
+				item_vb.add_child(sep)
 
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
