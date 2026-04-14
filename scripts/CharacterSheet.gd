@@ -677,60 +677,69 @@ func _build_equip(panel: PanelContainer) -> void:
 	var vb = _panel_vbox(panel, "裝備")
 	vb.add_theme_constant_override("separation", 0)
 
-	# GridContainer：2 欄 × 10 行
-	var grid = GridContainer.new()
-	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 12)
-	grid.add_theme_constant_override("v_separation", 0)
-	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vb.add_child(grid)
+	# HBoxContainer：左右兩欄
+	var columns_hb = HBoxContainer.new()
+	columns_hb.add_theme_constant_override("separation", 12)
+	columns_hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	columns_hb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vb.add_child(columns_hb)
 
 	# 合併所有槽位（12 個主要 + 8 個擴充）
 	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 
-	for i in range(all_slots.size()):
-		var slot = all_slots[i]
+	# 建立左右兩個 VBoxContainer
+	for col in range(2):
+		var col_vb = VBoxContainer.new()
+		col_vb.add_theme_constant_override("separation", 0)
+		col_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		col_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		columns_hb.add_child(col_vb)
 
-		# 垂直容器包裝每個項目（用於加分隔線）
-		var item_vb = VBoxContainer.new()
-		item_vb.add_theme_constant_override("separation", 2)
-		item_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		item_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		# 每欄 10 個槽位
+		for row in range(10):
+			var i = col * 10 + row
+			if i >= all_slots.size():
+				break
 
-		# 橫向排列：名稱在左，選單在右
-		var hbox = HBoxContainer.new()
-		hbox.add_theme_constant_override("separation", 8)
-		hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		item_vb.add_child(hbox)
+			var slot = all_slots[i]
 
-		# 槽位名稱（左側，更大，加左側 margin）
-		var lbl = Label.new()
-		lbl.text = "  " + slot  # 加兩個空格作為左側 margin
-		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 11)
-		lbl.custom_minimum_size.x = 90
-		hbox.add_child(lbl)
+			# 垂直容器包裝每個項目（用於加分隔線）
+			var item_vb = VBoxContainer.new()
+			item_vb.add_theme_constant_override("separation", 2)
+			item_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			item_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
-		# 裝備選擇下拉選單（右側，縮小高度）
-		var opt = OptionButton.new()
-		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		opt.add_item("（空）")
-		opt.add_theme_font_size_override("font_size", 10)
-		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		opt.custom_minimum_size.y = 24
-		_equip_inputs[slot] = opt
-		hbox.add_child(opt)
+			# 橫向排列：名稱在左，選單在右
+			var hbox = HBoxContainer.new()
+			hbox.add_theme_constant_override("separation", 8)
+			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+			item_vb.add_child(hbox)
 
-		# 分隔線（不是最後兩個才加，因為是 2 欄排列）
-		# 每欄有 10 行，所以索引 9 和 19 是每欄的最後一個，不加線
-		var col_idx = i % 10  # 在該欄的索引
-		if col_idx < 9:  # 不是該欄的最後一個
-			var sep = HSeparator.new()
-			item_vb.add_child(sep)
+			# 槽位名稱（左側，更大，加左側 margin）
+			var lbl = Label.new()
+			lbl.text = "  " + slot  # 加兩個空格作為左側 margin
+			lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			lbl.add_theme_font_size_override("font_size", 11)
+			lbl.custom_minimum_size.x = 90
+			hbox.add_child(lbl)
 
-		grid.add_child(item_vb)
+			# 裝備選擇下拉選單（右側，縮小高度）
+			var opt = OptionButton.new()
+			opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			opt.add_item("（空）")
+			opt.add_theme_font_size_override("font_size", 10)
+			opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
+			opt.custom_minimum_size.y = 24
+			_equip_inputs[slot] = opt
+			hbox.add_child(opt)
+
+			# 分隔線（不是該欄的最後一個才加）
+			if row < 9:
+				var sep = HSeparator.new()
+				item_vb.add_child(sep)
+
+			col_vb.add_child(item_vb)
 
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
