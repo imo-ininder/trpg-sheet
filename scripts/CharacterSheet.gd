@@ -480,43 +480,51 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 
 		grid.add_child(card)
 
-# ── 裝備欄位（垂直列表，每行 slot名 + OptionButton）────
+# ── 裝備欄位（10×2 網格佈局，含 12 個主要 + 8 個擴充槽位）────
 func _build_equip(panel: PanelContainer) -> void:
-	var vb = _panel_vbox(panel)
+	var vb = _panel_vbox(panel, "裝備")
 
-	# 用 ScrollContainer 包住所有裝備列，使裝備欄不會撐大 main_row 的最小高度，
-	# 讓技能區有足夠空間顯示預設 10 列
+	# 用 ScrollContainer 包住所有裝備格，使裝備欄可捲動
 	var scroll = ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	vb.add_child(scroll)
 
-	var items_vb = VBoxContainer.new()
-	items_vb.add_theme_constant_override("separation", 2)
-	items_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(items_vb)
+	# GridContainer：2 欄 × 10 行
+	var grid = GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 4)
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(grid)
 
-	for slot in CharacterData.EQUIP_SLOTS:
-		var row = HBoxContainer.new()
-		row.add_theme_constant_override("separation", 6)
-		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# 合併所有槽位（12 個主要 + 8 個擴充）
+	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 
+	for slot in all_slots:
+		var vbox = VBoxContainer.new()
+		vbox.add_theme_constant_override("separation", 2)
+		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+
+		# 槽位名稱標籤（置中）
 		var lbl = Label.new()
 		lbl.text = slot
-		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 10)
-		lbl.custom_minimum_size.x = 78
+		vbox.add_child(lbl)
 
+		# 裝備選擇下拉選單（文字置中）
 		var opt = OptionButton.new()
 		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		opt.add_item("（空）")
 		opt.add_theme_font_size_override("font_size", 10)
+		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER  # ← 文字置中
 		_equip_inputs[slot] = opt
+		vbox.add_child(opt)
 
-		row.add_child(lbl)
-		row.add_child(opt)
-		items_vb.add_child(row)
+		grid.add_child(vbox)
 
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
@@ -565,12 +573,19 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	# 設定最小高度，確保不會無限延伸
+	scroll.custom_minimum_size.y = 300
 	vb.add_child(scroll)
 
 	var rows_vb = VBoxContainer.new()
 	rows_vb.add_theme_constant_override("separation", 2)
 	rows_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	# 重要：移除 vertical 的 expand flag，讓內容撐開 ScrollContainer
+	rows_vb.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	scroll.add_child(rows_vb)
+
+	# 初始化技能列表陣列
 	_skill_rows[cat] = []
 
 	# 預設 10 列
@@ -698,7 +713,9 @@ func load_data(data: CharacterData) -> void:
 	_mp_inputs["cp"].text = str(data.mp_cp)
 	_mp_inputs["current"].text = str(data.mp_current)
 	_recalc_resource("mp")
-	for slot in CharacterData.EQUIP_SLOTS:
+	# 載入裝備（包含主要 + 擴充槽位）
+	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
+	for slot in all_slots:
 		if _equip_inputs.has(slot):
 			var opt: OptionButton = _equip_inputs[slot]
 			var item_name: String = data.equipment.get(slot, "")
@@ -746,7 +763,9 @@ func flush_to_data() -> void:
 	_data.res_acid        = int(_elem_resist_inputs["酸"].text)   if _elem_resist_inputs["酸"].text.is_valid_int()   else 0
 	_data.res_sound       = int(_elem_resist_inputs["音"].text)   if _elem_resist_inputs["音"].text.is_valid_int()   else 0
 	_data.res_psychic     = int(_elem_resist_inputs["心"].text)   if _elem_resist_inputs["心"].text.is_valid_int()   else 0
-	for slot in CharacterData.EQUIP_SLOTS:
+	# 回寫裝備（包含主要 + 擴充槽位）
+	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
+	for slot in all_slots:
 		if _equip_inputs.has(slot):
 			var opt: OptionButton = _equip_inputs[slot]
 			var text := opt.get_item_text(opt.selected)

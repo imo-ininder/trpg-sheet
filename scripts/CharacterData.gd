@@ -102,7 +102,10 @@ const SKILL_CATS = ["戰鬥類","運動類","操作類","感知類","知識類",
 func _init():
 	for cat in SKILL_CATS:
 		skills[cat] = []
+	# 初始化所有裝備槽位（主要 + 擴充）
 	for slot in EQUIP_SLOTS:
+		equipment[slot] = ""
+	for slot in EQUIP_SLOTS_EXPANSION:
 		equipment[slot] = ""
 
 # ── 其他效果 ──────────────────────────────────────
