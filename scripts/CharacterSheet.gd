@@ -502,15 +502,28 @@ func _build_resources(parent: VBoxContainer) -> void:
 			sub_lbl.add_theme_font_size_override("font_size", 10)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			col.add_child(sub_lbl)
-			var le = LineEdit.new()
-			le.text = "13" if suffix == "base" else "0"
-			le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			le.add_theme_font_size_override("font_size", 12)
-			if key == "hp": _hp_inputs[suffix] = le
-			else:           _mp_inputs[suffix] = le
-			le.text_changed.connect(func(_v): _recalc_resource(key))
-			col.add_child(le)
+
+			if suffix == "base":
+				# 基礎值唯讀，由 CON/RES 自動計算
+				var value_lbl = Label.new()
+				value_lbl.text = "13"
+				value_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				value_lbl.add_theme_font_size_override("font_size", 12)
+				if key == "hp": _hp_inputs[suffix] = value_lbl
+				else:           _mp_inputs[suffix] = value_lbl
+				col.add_child(value_lbl)
+			else:
+				# 獎勵和 CP 可編輯
+				var le = LineEdit.new()
+				le.text = "0"
+				le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				le.alignment = HORIZONTAL_ALIGNMENT_CENTER
+				le.add_theme_font_size_override("font_size", 12)
+				if key == "hp": _hp_inputs[suffix] = le
+				else:           _mp_inputs[suffix] = le
+				le.text_changed.connect(func(_v): _recalc_resource(key))
+				col.add_child(le)
+
 			sub_row.add_child(col)
 
 		cards_hb.add_child(card)
@@ -934,6 +947,15 @@ func _recalc_attr(attr: String) -> void:
 	# 更新判定複合數值（如果相關屬性改變）
 	_recalc_all_compounds()
 
+	# 更新抗性數值（如果相關屬性改變）
+	_recalc_all_resists()
+
+	# 更新生命/魔力基礎值（如果 CON/RES 改變）
+	if attr == "CON":
+		_recalc_resource("hp")
+	elif attr == "RES":
+		_recalc_resource("mp")
+
 func _recalc_compound(name: String) -> void:
 	# 從 UI 取得當前屬性總和（最終數值）
 	var base_value = 0
@@ -963,6 +985,10 @@ func _recalc_all_compounds() -> void:
 	for name in CharacterData.COMPOUND_NAMES:
 		_recalc_compound(name)
 
+func _recalc_all_resists() -> void:
+	for name in CharacterData.RESIST_NAMES:
+		_recalc_resist(name)
+
 # 從 UI 取得屬性總和
 func _get_attr_total(attr: String) -> int:
 	var total_label = _attr_totals.get(attr)
@@ -971,13 +997,38 @@ func _get_attr_total(attr: String) -> int:
 	return 13  # 預設值
 
 func _recalc_resist(name: String) -> void:
+	# 從 UI 取得當前屬性總和計算抗性基礎值
+	var base_value = 0
+	match name:
+		"抗毒素":
+			base_value = _get_attr_total("CON") + _get_attr_total("RES")
+		"抗控制":
+			base_value = _get_attr_total("RES") + _get_attr_total("WIS")
+		"抗轉化":
+			base_value = _get_attr_total("RES") * 2
+		"抗噴吐":
+			base_value = _get_attr_total("RES") + _get_attr_total("DEX")
+		"抗魔法":
+			base_value = _get_attr_total("RES") + _get_attr_total("INT")
+
 	var adj  = _resist_hidden.get(name + "_adj",  0)
 	var temp = _resist_hidden.get(name + "_temp", 0)
+	var total = base_value + adj + temp
+
 	if _resist_totals.has(name):
-		_resist_totals[name].text = str(26 + adj + temp)
+		_resist_totals[name].text = str(total)
 
 func _recalc_resource(key: String) -> void:
 	var inputs = _hp_inputs if key == "hp" else _mp_inputs
+
+	# 自動設定基礎值：生命 = CON，魔力 = RES
+	if key == "hp":
+		var con_total = _get_attr_total("CON")
+		inputs["base"].text = str(con_total)
+	else:  # mp
+		var res_total = _get_attr_total("RES")
+		inputs["base"].text = str(res_total)
+
 	var total = 0
 	for s in ["base", "bonus", "cp"]:
 		var le = inputs.get(s)
@@ -1006,12 +1057,12 @@ func load_data(data: CharacterData) -> void:
 		_compound_hidden[name + "_adj"]  = data.compound_adj.get(name, 0)
 		_compound_hidden[name + "_temp"] = data.compound_temp.get(name, 0)
 
-	# 屬性載入完成後，更新所有複合數值
+	# 屬性載入完成後，更新所有複合數值和抗性
 	_recalc_all_compounds()
 	for name in CharacterData.RESIST_NAMES:
 		_resist_hidden[name + "_adj"]  = data.resist_adj.get(name, 0)
 		_resist_hidden[name + "_temp"] = data.resist_temp.get(name, 0)
-		_recalc_resist(name)
+	_recalc_all_resists()
 	# 強韌/精神/靈魂：自動從屬性計算
 	_soul_labels["強韌"].text = str(data.calc_fortitude())
 	_soul_labels["精神"].text = str(data.calc_spirit())
@@ -1031,16 +1082,15 @@ func load_data(data: CharacterData) -> void:
 		data.currency_platinum, data.currency_gold,
 		data.currency_silver,   data.currency_copper
 	]
-	_hp_inputs["base"].text = str(data.hp_base)
+	# HP/MP：基礎值由 CON/RES 自動計算，只載入 bonus/cp/current
 	_hp_inputs["bonus"].text = str(data.hp_bonus)
 	_hp_inputs["cp"].text = str(data.hp_cp)
 	_hp_inputs["current"].text = str(data.hp_current)
-	_recalc_resource("hp")
-	_mp_inputs["base"].text = str(data.mp_base)
+	_recalc_resource("hp")  # 會自動設定 base = CON
 	_mp_inputs["bonus"].text = str(data.mp_bonus)
 	_mp_inputs["cp"].text = str(data.mp_cp)
 	_mp_inputs["current"].text = str(data.mp_current)
-	_recalc_resource("mp")
+	_recalc_resource("mp")  # 會自動設定 base = RES
 	# 載入裝備（包含主要 + 擴充槽位）
 	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 	for slot in all_slots:
