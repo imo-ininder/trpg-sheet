@@ -36,6 +36,9 @@ const SKILL_DEFAULT_ROWS = 10  # 預設行數
 
 # ── 建立 UI ──────────────────────────────────────
 func _ready() -> void:
+	# 讓 CharacterSheet 本身填滿父容器（SheetContainer）
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_build_ui()
 
 func _build_ui() -> void:
