@@ -1,0 +1,58 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1sm5ugugx10x"]
+
+[ext_resource type="Script" uid="uid://6xqujpf8bvcs" path="res://scripts/MainScene.gd" id="1"]
+[ext_resource type="Script" uid="uid://mxv3yvv4v4vr" path="res://scripts/CharacterSheet.gd" id="2"]
+
+[node name="MainScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="HBoxContainer" parent="VBox"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBox/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "D100 腳色卡"
+
+[node name="HSeparator" type="HSeparator" parent="VBox/TopBar"]
+layout_mode = 2
+
+[node name="BtnNew" type="Button" parent="VBox/TopBar"]
+layout_mode = 2
+text = "＋ 新增角色"
+
+[node name="BtnOpen" type="Button" parent="VBox/TopBar"]
+layout_mode = 2
+text = "📂 開啟角色"
+
+[node name="BtnSave" type="Button" parent="VBox/TopBar"]
+layout_mode = 2
+text = "💾 儲存"
+
+[node name="HSep" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="SheetContainer" type="ScrollContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="CharacterSheet" type="Control" parent="VBox/SheetContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2")
