@@ -18,7 +18,8 @@ var _soul_labels: Dictionary = {}       # "強韌"/"精神"/"靈魂" -> Label（
 var _elem_resist_inputs: Dictionary = {} # "法抗"/"物抗"/"火"... -> LineEdit
 var _hp_inputs: Dictionary = {}
 var _mp_inputs: Dictionary = {}
-var _equip_inputs: Dictionary = {}      # slot_name -> OptionButton
+# 裝備 tab UI 已移至 EquipTabPanel（scripts/ui/EquipTabPanel.gd）
+
 var _skill_rows: Dictionary = {}        # cat -> Array of {name, diff, level LineEdit}
 var _skill_scrolls: Dictionary = {}     # cat -> ScrollContainer（用於動態調整高度）
 var _currency_display: Label            # 頂部貨幣顯示標籤（唯讀）
@@ -57,8 +58,36 @@ func _build_ui() -> void:
 	margin.add_child(root)
 
 	_build_topbar(root)
-	_build_main_row(root)
-	_build_skill_row(root)
+	_build_pages(root)
+
+var _page_char: VBoxContainer
+var _page_equip: VBoxContainer
+var _equip_tab_panel: EquipTabPanel
+
+func _build_pages(parent: VBoxContainer) -> void:
+	_page_char = VBoxContainer.new()
+	_page_char.add_theme_constant_override("separation", 8)
+	_page_char.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_page_char.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	parent.add_child(_page_char)
+
+	_page_equip = VBoxContainer.new()
+	_page_equip.add_theme_constant_override("separation", 8)
+	_page_equip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_page_equip.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_page_equip.visible = false
+	parent.add_child(_page_equip)
+
+	_build_main_row(_page_char)
+	_build_skill_row(_page_char)
+
+	_equip_tab_panel = EquipTabPanel.new()
+	_page_equip.add_child(_equip_tab_panel)
+	_equip_tab_panel.equip_changed.connect(_recalc_equip_stats)
+
+func switch_tab(tab: String) -> void:
+	_page_char.visible  = (tab == "腳色")
+	_page_equip.visible = (tab == "裝備")
 
 # ── 頂部：基本資料 ────────────────────────────────
 func _build_topbar(parent: VBoxContainer) -> void:
@@ -143,12 +172,19 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	_build_phys_elem_resist(col3)
 	_build_combat(col3)
 
-	# 欄 4：裝備（2 欄 × 10 行）
+	# 欄 4：職業專屬 stats placeholder
 	var col4 = _make_panel()
 	col4.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	col4.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_build_equip(col4)
+	col4.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	hbox.add_child(col4)
+	var col4_vb = _panel_vbox(col4, "職業 Stats")
+	var placeholder_lbl = Label.new()
+	placeholder_lbl.text = "（待實作）"
+	placeholder_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	placeholder_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	placeholder_lbl.size_flags_vertical  = Control.SIZE_EXPAND_FILL
+	placeholder_lbl.add_theme_font_size_override("font_size", 13)
+	col4_vb.add_child(placeholder_lbl)
 
 
 # ── 屬性表（D&D 卡片式 3×3）────────────────────────
@@ -702,75 +738,6 @@ func _build_soul_stats_section(parent: VBoxContainer) -> void:
 
 		grid.add_child(card)
 
-# ── 裝備欄位（10×2 網格佈局，含 12 個主要 + 8 個擴充槽位）────
-func _build_equip(panel: PanelContainer) -> void:
-	var vb = _panel_vbox(panel, "裝備")
-	vb.add_theme_constant_override("separation", 0)
-
-	# HBoxContainer：左右兩欄
-	var columns_hb = HBoxContainer.new()
-	columns_hb.add_theme_constant_override("separation", 12)
-	columns_hb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	columns_hb.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	vb.add_child(columns_hb)
-
-	# 合併所有槽位（12 個主要 + 8 個擴充）
-	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
-
-	# 建立左右兩個 VBoxContainer
-	for col in range(2):
-		var col_vb = VBoxContainer.new()
-		col_vb.add_theme_constant_override("separation", 0)
-		col_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		col_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
-		columns_hb.add_child(col_vb)
-
-		# 每欄 10 個槽位
-		for row in range(10):
-			var i = col * 10 + row
-			if i >= all_slots.size():
-				break
-
-			var slot = all_slots[i]
-
-			# 垂直容器包裝每個項目（用於加分隔線）
-			var item_vb = VBoxContainer.new()
-			item_vb.add_theme_constant_override("separation", 2)
-			item_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			item_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
-
-			# 橫向排列：名稱在左，選單在右
-			var hbox = HBoxContainer.new()
-			hbox.add_theme_constant_override("separation", 8)
-			hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-			item_vb.add_child(hbox)
-
-			# 槽位名稱（左側，更大，加左側 margin）
-			var lbl = Label.new()
-			lbl.text = "  " + slot  # 加兩個空格作為左側 margin
-			lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			lbl.add_theme_font_size_override("font_size", 11)
-			lbl.custom_minimum_size.x = 90
-			hbox.add_child(lbl)
-
-			# 裝備選擇下拉選單（右側，縮小高度）
-			var opt = OptionButton.new()
-			opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			opt.add_item("（空）")
-			opt.add_theme_font_size_override("font_size", 10)
-			opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			opt.custom_minimum_size.y = 24
-			_equip_inputs[slot] = opt
-			hbox.add_child(opt)
-
-			# 分隔線（不是該欄的最後一個才加）
-			if row < 9:
-				var sep = HSeparator.new()
-				item_vb.add_child(sep)
-
-			col_vb.add_child(item_vb)
-
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
 	var hbox = HBoxContainer.new()
@@ -1091,24 +1058,10 @@ func load_data(data: CharacterData) -> void:
 	_mp_inputs["cp"].text = str(data.mp_cp)
 	_mp_inputs["current"].text = str(data.mp_current)
 	_recalc_resource("mp")  # 會自動設定 base = RES
-	# 載入裝備（包含主要 + 擴充槽位）
-	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
-	for slot in all_slots:
-		if _equip_inputs.has(slot):
-			var opt: OptionButton = _equip_inputs[slot]
-			var item_name: String = data.equipment.get(slot, "")
-			if item_name == "":
-				opt.selected = 0
-			else:
-				var found := false
-				for i in opt.item_count:
-					if opt.get_item_text(i) == item_name:
-						opt.selected = i
-						found = true
-						break
-				if not found:
-					opt.add_item(item_name)
-					opt.selected = opt.item_count - 1
+	# 裝備 tab
+	if _equip_tab_panel:
+		_equip_tab_panel.set_data(data)
+	_recalc_equip_stats()
 
 func flush_to_data() -> void:
 	if _data == null: return
@@ -1145,13 +1098,52 @@ func flush_to_data() -> void:
 	_data.res_psychic     = int(_elem_resist_inputs["心"].text)   if _elem_resist_inputs["心"].text.is_valid_int()   else 0
 	_data.res_light       = int(_elem_resist_inputs["光"].text)   if _elem_resist_inputs["光"].text.is_valid_int()   else 0
 	_data.res_dark        = int(_elem_resist_inputs["暗"].text)   if _elem_resist_inputs["暗"].text.is_valid_int()   else 0
-	# 回寫裝備（包含主要 + 擴充槽位）
-	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
-	for slot in all_slots:
-		if _equip_inputs.has(slot):
-			var opt: OptionButton = _equip_inputs[slot]
-			var text := opt.get_item_text(opt.selected)
-			_data.equipment[slot] = "" if text == "（空）" else text
+	# 裝備槽 / 道具庫：互動時已即時寫入 _data，無需額外回寫
+
+# ── 裝備加成計算 ──────────────────────────────────
+func _recalc_equip_stats() -> void:
+	if _data == null: return
+	var bonuses := AffixLibrary.calc_bonuses(_data.item_library, _data.equipment)
+
+	# 屬性加成 → attr_equip（_recalc_attr 會讀取 _attr_hidden）
+	for attr in CharacterData.ATTR_NAMES:
+		_attr_hidden[attr + "_equip"] = bonuses.get(attr, 0)
+		_recalc_attr(attr)
+
+	# HP / MP 加成
+	if bonuses.has("hp_bonus"):
+		_data.hp_bonus = bonuses.get("hp_bonus", 0)
+		_hp_inputs["bonus"].text = str(_data.hp_bonus)
+		_recalc_resource("hp")
+	if bonuses.has("mp_bonus"):
+		_data.mp_bonus = bonuses.get("mp_bonus", 0)
+		_mp_inputs["bonus"].text = str(_data.mp_bonus)
+		_recalc_resource("mp")
+
+	# 物抗 / 法抗
+	if bonuses.has("phys_resist"):
+		_data.phys_resist = bonuses.get("phys_resist", 0)
+		if _elem_resist_inputs.has("物抗"):
+			_elem_resist_inputs["物抗"].text = str(_data.phys_resist)
+	if bonuses.has("magic_resist"):
+		_data.magic_resist = bonuses.get("magic_resist", 0)
+		if _elem_resist_inputs.has("法抗"):
+			_elem_resist_inputs["法抗"].text = str(_data.magic_resist)
+
+	# 元素抗性
+	var elem_map := {
+		"res_fire": "火", "res_ice": "冰", "res_lightning": "電",
+		"res_acid": "酸", "res_sound": "音",
+	}
+	for sk in elem_map:
+		if bonuses.has(sk):
+			var ui_key: String = elem_map[sk]
+			if _elem_resist_inputs.has(ui_key):
+				_elem_resist_inputs[ui_key].text = str(bonuses.get(sk, 0))
+
+	# 移動力
+	if bonuses.has("combat_move"):
+		_data.combat_move = bonuses.get("combat_move", 0)
 
 # ── 輔助函式 ──────────────────────────────────────
 func _make_panel() -> PanelContainer:

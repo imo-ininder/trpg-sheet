@@ -27,6 +27,7 @@ window/stretch/aspect="expand"
 [autoload]
 
 CharacterManager="*res://scripts/CharacterManager.gd"
+AffixLibrary="*res://scripts/data/AffixLibrary.gd"
 
 [dotnet]
 

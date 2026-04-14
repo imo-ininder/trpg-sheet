@@ -3,3 +3,5 @@ res://scripts/CharacterSheet.gd
 res://scripts/CharacterData.gd
 res://scripts/MainScene.gd
 res://CLAUDE.md
+res://scripts/ui/EquipTabPanel.gd
+res://scripts/data/AffixLibrary.gd

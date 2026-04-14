@@ -163,5 +163,9 @@ func _init():
 @export var currency_silver: int = 50
 @export var currency_copper: int = 0
 
+# ── 道具庫 ────────────────────────────────────────
+# 每個 item：{ "name": String, "base_type": String, "slot": String, "mods": Array }
+@export var item_library: Array = []
+
 # ── 備註 ──────────────────────────────────────────
 @export var notes: String = ""
