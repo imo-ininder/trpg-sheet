@@ -111,30 +111,30 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	hbox.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	parent.add_child(hbox)
 
-	# 欄 1：屬性（高度自適應，不撐滿整欄）
+	# 欄 1：屬性（填滿高度）
 	var col1 = _make_panel()
 	col1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	col1.size_flags_vertical   = Control.SIZE_SHRINK_BEGIN
+	col1.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	_build_attrs(col1)
 	hbox.add_child(col1)
 
-	# 欄 2：複合/抗性/HP/MP
+	# 欄 2：複合/抗性/強韌精神靈魂
 	var col2 = VBoxContainer.new()
 	col2.add_theme_constant_override("separation", 8)
 	col2.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(col2)
 	_build_compound(col2)
 	_build_resists(col2)
-	_build_resources(col2)
+	_build_soul_stats(col2)
 
-	# 欄 3：戰鬥數值 + 強韌/精神/靈魂
+	# 欄 3：戰鬥數值 + 物理/元素抗性 + HP/MP
 	var col3 = VBoxContainer.new()
 	col3.add_theme_constant_override("separation", 8)
 	col3.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(col3)
 	_build_combat(col3)
 	_build_phys_elem_resist(col3)
-	_build_soul_stats(col3)
+	_build_resources(col3)
 
 	# 欄 4：裝備（2 欄 × 10 行）
 	var col4 = _make_panel()
@@ -147,11 +147,13 @@ func _build_main_row(parent: VBoxContainer) -> void:
 # ── 屬性表（D&D 卡片式 3×3）────────────────────────
 func _build_attrs(panel: PanelContainer) -> void:
 	var vb = _panel_vbox(panel, "屬性")
+	vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	var grid = GridContainer.new()
 	grid.columns = 3
 	grid.add_theme_constant_override("h_separation", 6)
 	grid.add_theme_constant_override("v_separation", 6)
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vb.add_child(grid)
 
 	for attr in CharacterData.ATTR_NAMES:
@@ -162,8 +164,10 @@ func _build_attrs(panel: PanelContainer) -> void:
 		# 卡片外框
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		var card_vb = VBoxContainer.new()
 		card_vb.add_theme_constant_override("separation", 2)
+		card_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		card.add_child(card_vb)
 
 		# 屬性名稱（小標題）
