@@ -484,47 +484,40 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 func _build_equip(panel: PanelContainer) -> void:
 	var vb = _panel_vbox(panel, "裝備")
 
-	# 用 ScrollContainer 包住所有裝備格，使裝備欄可捲動
-	var scroll = ScrollContainer.new()
-	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	vb.add_child(scroll)
-
 	# GridContainer：2 欄 × 10 行
 	var grid = GridContainer.new()
 	grid.columns = 2
-	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("h_separation", 12)
 	grid.add_theme_constant_override("v_separation", 4)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(grid)
+	vb.add_child(grid)
 
 	# 合併所有槽位（12 個主要 + 8 個擴充）
 	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 
 	for slot in all_slots:
-		var vbox = VBoxContainer.new()
-		vbox.add_theme_constant_override("separation", 2)
-		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		var hbox = HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 6)
+		hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
-		# 槽位名稱標籤（置中）
+		# 槽位名稱標籤（左側）
 		var lbl = Label.new()
 		lbl.text = slot
-		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 10)
-		vbox.add_child(lbl)
+		lbl.custom_minimum_size.x = 90
+		hbox.add_child(lbl)
 
-		# 裝備選擇下拉選單（文字置中）
+		# 裝備選擇下拉選單（右側，文字置中）
 		var opt = OptionButton.new()
 		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		opt.add_item("（空）")
 		opt.add_theme_font_size_override("font_size", 10)
-		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER  # ← 文字置中
+		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_equip_inputs[slot] = opt
-		vbox.add_child(opt)
+		hbox.add_child(opt)
 
-		grid.add_child(vbox)
+		grid.add_child(hbox)
 
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
@@ -574,8 +567,7 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
-	# 設定最小高度，確保不會無限延伸
-	scroll.custom_minimum_size.y = 300
+	# 不設定固定高度，讓它根據視窗大小動態調整
 	vb.add_child(scroll)
 
 	var rows_vb = VBoxContainer.new()
