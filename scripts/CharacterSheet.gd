@@ -149,6 +149,7 @@ func _build_attrs(panel: PanelContainer) -> void:
 
 		# 卡片外框
 		var card = PanelContainer.new()
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var card_vb = VBoxContainer.new()
 		card_vb.add_theme_constant_override("separation", 2)
 		card.add_child(card_vb)
@@ -483,6 +484,19 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 func _build_equip(panel: PanelContainer) -> void:
 	var vb = _panel_vbox(panel)
 
+	# 用 ScrollContainer 包住所有裝備列，使裝備欄不會撐大 main_row 的最小高度，
+	# 讓技能區有足夠空間顯示預設 10 列
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vb.add_child(scroll)
+
+	var items_vb = VBoxContainer.new()
+	items_vb.add_theme_constant_override("separation", 2)
+	items_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(items_vb)
+
 	for slot in CharacterData.EQUIP_SLOTS:
 		var row = HBoxContainer.new()
 		row.add_theme_constant_override("separation", 6)
@@ -502,64 +516,69 @@ func _build_equip(panel: PanelContainer) -> void:
 
 		row.add_child(lbl)
 		row.add_child(opt)
-		vb.add_child(row)
+		items_vb.add_child(row)
 
 # ── 技能（六類各自獨立 panel，並排）────────────────────
 func _build_skill_row(parent: VBoxContainer) -> void:
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 8)
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL  # 佔滿視窗剩餘高度
+	hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	parent.add_child(hbox)
 
 	for cat in CharacterData.SKILL_CATS:
-		var panel = _make_panel()
-		panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
-		hbox.add_child(panel)
-		var vb = _panel_vbox(panel)
+		_build_one_skill_panel(hbox, cat)
 
-		# 類別標題列：左側文字，右側「+」按鈕（固定，不捲動）
-		var title_row = HBoxContainer.new()
-		title_row.add_theme_constant_override("separation", 4)
-		vb.add_child(title_row)
+# 獨立函式：確保每個 panel 的 cat / rows_vb 有各自獨立的 scope，
+# 避免 GDScript for 迴圈的閉包捕獲問題（所有 lambda 會共用同一個迴圈變數）
+func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
+	var panel = _make_panel()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	hbox.add_child(panel)
+	var vb = _panel_vbox(panel)
 
-		var cat_lbl = Label.new()
-		cat_lbl.text = cat
-		cat_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		cat_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cat_lbl.add_theme_font_size_override("font_size", 11)
-		title_row.add_child(cat_lbl)
+	# 類別標題列：左側文字，右側「+」按鈕（固定，不捲動）
+	var title_row = HBoxContainer.new()
+	title_row.add_theme_constant_override("separation", 4)
+	vb.add_child(title_row)
 
-		var btn = Button.new()
-		btn.text = "+"
-		btn.custom_minimum_size.x = 24
-		btn.add_theme_font_size_override("font_size", 13)
-		title_row.add_child(btn)
+	var cat_lbl = Label.new()
+	cat_lbl.text = cat
+	cat_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	cat_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	cat_lbl.add_theme_font_size_override("font_size", 11)
+	title_row.add_child(cat_lbl)
 
-		# 欄位標頭（固定，不捲動）
-		var header = _make_hbox(["名稱", "難度", "等級", ""], [0, 36, 36, 22])
-		vb.add_child(header)
+	var btn = Button.new()
+	btn.text = "+"
+	btn.custom_minimum_size.x = 24
+	btn.add_theme_font_size_override("font_size", 13)
+	title_row.add_child(btn)
 
-		# 捲動區域：只有技能列捲動，標題/標頭留在外面
-		var scroll = ScrollContainer.new()
-		scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
-		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-		vb.add_child(scroll)
+	# 欄位標頭（固定，不捲動）
+	var header = _make_hbox(["名稱", "難度", "等級", ""], [0, 36, 36, 22])
+	vb.add_child(header)
 
-		var rows_vb = VBoxContainer.new()
-		rows_vb.add_theme_constant_override("separation", 3)
-		rows_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		scroll.add_child(rows_vb)
-		_skill_rows[cat] = []
+	# ScrollContainer：標題/標頭固定，只有列在此捲動
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vb.add_child(scroll)
 
-		# 預設 10 列
-		for _i in range(10):
-			_add_skill_row(cat, rows_vb)
+	var rows_vb = VBoxContainer.new()
+	rows_vb.add_theme_constant_override("separation", 2)
+	rows_vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(rows_vb)
+	_skill_rows[cat] = []
 
-		# 連接「+」按鈕（rows_vb 已確定後再 connect）
-		btn.pressed.connect(func(): _add_skill_row(cat, rows_vb))
+	# 預設 10 列
+	for _i in range(10):
+		_add_skill_row(cat, rows_vb)
+
+	# 直接 lambda，cat / rows_vb 是函式參數，在各自 stack frame 中固定，不受閉包捕獲問題影響
+	btn.pressed.connect(func(): _add_skill_row(cat, rows_vb))
 
 func _add_skill_row(cat: String, container: VBoxContainer) -> void:
 	var row = HBoxContainer.new()
@@ -570,10 +589,13 @@ func _add_skill_row(cat: String, container: VBoxContainer) -> void:
 	name_le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_le.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_le.add_theme_font_size_override("font_size", 11)
+	name_le.custom_minimum_size.y = 28
 	row.add_child(name_le)
 
 	var diff_le = _make_number_edit(36)
 	var lvl_le  = _make_number_edit(36)
+	diff_le.custom_minimum_size.y = 28
+	lvl_le.custom_minimum_size.y  = 28
 	row.add_child(diff_le)
 	row.add_child(lvl_le)
 
@@ -756,7 +778,7 @@ func _make_number_edit(min_width: int) -> LineEdit:
 		le.custom_minimum_size.x = min_width
 	le.text = "0"
 	le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-	le.add_theme_font_size_override("font_size", 12)
+	le.add_theme_font_size_override("font_size", 11)
 	return le
 
 func _make_total_label(value: String, min_width: int) -> Label:

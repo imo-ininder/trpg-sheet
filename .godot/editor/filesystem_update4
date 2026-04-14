@@ -2,3 +2,4 @@ res://scenes/MainScene.tscn
 res://scripts/CharacterSheet.gd
 res://scripts/CharacterData.gd
 res://scripts/MainScene.gd
+res://CLAUDE.md
