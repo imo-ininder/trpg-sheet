@@ -198,32 +198,49 @@ func _build_attrs(panel: PanelContainer) -> void:
 
 		card_vb.add_child(HSeparator.new())
 
-		# 基礎 / 加值 輸入格（縮小）
+		# 基礎 / 加減值（縮小）
 		var row = HBoxContainer.new()
 		row.add_theme_constant_override("separation", 3)
 		card_vb.add_child(row)
 
-		for pair in [["base", "基礎"], ["bonus", "加值"]]:
-			var suffix     = pair[0]
-			var label_text = pair[1]
-			var col = VBoxContainer.new()
-			col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			col.add_theme_constant_override("separation", 1)
-			var sub_lbl = Label.new()
-			sub_lbl.text = label_text
-			sub_lbl.add_theme_font_size_override("font_size", 9)
-			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			col.add_child(sub_lbl)
-			var le = LineEdit.new()
-			le.text = "13" if suffix == "base" else "0"
-			le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			le.add_theme_font_size_override("font_size", 10)
-			le.custom_minimum_size.y = 22
-			_attr_inputs[attr + "_" + suffix] = le
-			le.text_changed.connect(func(_v): _recalc_attr(attr))
-			col.add_child(le)
-			row.add_child(col)
+		# 基礎值（可編輯）
+		var base_col = VBoxContainer.new()
+		base_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		base_col.add_theme_constant_override("separation", 1)
+		var base_lbl = Label.new()
+		base_lbl.text = "基礎"
+		base_lbl.add_theme_font_size_override("font_size", 9)
+		base_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		base_col.add_child(base_lbl)
+		var base_le = LineEdit.new()
+		base_le.text = "13"
+		base_le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		base_le.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		base_le.add_theme_font_size_override("font_size", 10)
+		base_le.custom_minimum_size.y = 22
+		_attr_inputs[attr + "_base"] = base_le
+		base_le.text_changed.connect(func(_v): _recalc_attr(attr))
+		base_col.add_child(base_le)
+		row.add_child(base_col)
+
+		# 加減值（唯讀，自動計算）
+		var mod_col = VBoxContainer.new()
+		mod_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		mod_col.add_theme_constant_override("separation", 1)
+		var mod_lbl = Label.new()
+		mod_lbl.text = "加減值"
+		mod_lbl.add_theme_font_size_override("font_size", 9)
+		mod_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		mod_col.add_child(mod_lbl)
+		var mod_label = Label.new()
+		mod_label.text = "0"
+		mod_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		mod_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		mod_label.add_theme_font_size_override("font_size", 10)
+		mod_label.custom_minimum_size.y = 22
+		_attr_inputs[attr + "_modifier"] = mod_label  # 儲存為 Label
+		mod_col.add_child(mod_label)
+		row.add_child(mod_col)
 
 		grid.add_child(card)
 
@@ -882,21 +899,76 @@ func _update_skill_scroll_height(cat: String) -> void:
 
 # ── 計算邏輯 ──────────────────────────────────────
 func _recalc_attr(attr: String) -> void:
-	var total = 0
-	for suffix in ["base", "bonus"]:
-		var le = _attr_inputs.get(attr + "_" + suffix)
-		if le: total += int(le.text) if le.text.is_valid_int() else 0
-	# 裝備與臨時修正（隱藏欄位，由外部系統寫入）
+	# 取得基礎值
+	var base_le = _attr_inputs.get(attr + "_base")
+	var base_val = 13
+	if base_le and base_le.text.is_valid_int():
+		base_val = int(base_le.text)
+
+	# 計算加減值：(基礎值 - 13) / 2，無條件進位
+	var modifier = int(ceil((base_val - 13) / 2.0))
+
+	# 更新加減值顯示（唯讀 Label）
+	var mod_label = _attr_inputs.get(attr + "_modifier")
+	if mod_label:
+		mod_label.text = str(modifier) if modifier >= 0 else str(modifier)
+
+	# 計算總和：基礎值 + 裝備 + 臨時 + 加減值
+	var total = base_val
 	total += _attr_hidden.get(attr + "_equip", 0)
 	total += _attr_hidden.get(attr + "_temp",  0)
+	# 注意：加減值已經包含在 attr_modifier 計算中，這裡不重複加
+
+	# 更新總和顯示
 	if _attr_totals.has(attr):
 		_attr_totals[attr].text = str(total)
 
+	# 更新強韌/精神/靈魂（如果相關屬性改變）
+	if attr == "CON" and _soul_labels.has("強韌"):
+		_soul_labels["強韌"].text = str(base_val * 5)
+	elif attr == "RES" and _soul_labels.has("精神"):
+		_soul_labels["精神"].text = str(base_val * 5)
+	elif attr == "SPI" and _soul_labels.has("靈魂"):
+		_soul_labels["靈魂"].text = str(base_val * 5)
+
+	# 更新判定複合數值（如果相關屬性改變）
+	_recalc_all_compounds()
+
 func _recalc_compound(name: String) -> void:
+	# 從 UI 取得當前屬性總和（最終數值）
+	var base_value = 0
+	match name:
+		"戰鬥":
+			base_value = _get_attr_total("STR") + _get_attr_total("DEX") + _get_attr_total("SKI")
+		"運動":
+			base_value = _get_attr_total("DEX") + _get_attr_total("SKI") + _get_attr_total("CON")
+		"操作":
+			base_value = _get_attr_total("SKI") + _get_attr_total("INT") + _get_attr_total("WIS")
+		"感知":
+			base_value = _get_attr_total("RES") + _get_attr_total("INT") + _get_attr_total("SPI")
+		"知識":
+			base_value = int(floor((_get_attr_total("INT") + _get_attr_total("WIS")) * 1.5))
+		"交涉":
+			base_value = _get_attr_total("WIS") + _get_attr_total("CHA") + _get_attr_total("SPI")
+
+	# 加上調整值和臨時值
 	var adj  = _compound_hidden.get(name + "_adj",  0)
 	var temp = _compound_hidden.get(name + "_temp", 0)
+	var total = base_value + adj + temp
+
 	if _compound_totals.has(name):
-		_compound_totals[name].text = str(39 + adj + temp)
+		_compound_totals[name].text = str(total)
+
+func _recalc_all_compounds() -> void:
+	for name in CharacterData.COMPOUND_NAMES:
+		_recalc_compound(name)
+
+# 從 UI 取得屬性總和
+func _get_attr_total(attr: String) -> int:
+	var total_label = _attr_totals.get(attr)
+	if total_label and total_label.text.is_valid_int():
+		return int(total_label.text)
+	return 13  # 預設值
 
 func _recalc_resist(name: String) -> void:
 	var adj  = _resist_hidden.get(name + "_adj",  0)
@@ -922,23 +994,28 @@ func load_data(data: CharacterData) -> void:
 	_align_edit.text = data.alignment
 	_cp_edit.text    = str(data.cp)
 	for attr in CharacterData.ATTR_NAMES:
-		_attr_inputs[attr + "_base"].text  = str(data.attr_base.get(attr, 13))
-		_attr_inputs[attr + "_bonus"].text = str(data.attr_bonus.get(attr, 0))
+		_attr_inputs[attr + "_base"].text = str(data.attr_base.get(attr, 13))
 		# 裝備/臨時存入隱藏字典，之後系統連動時使用
 		_attr_hidden[attr + "_equip"] = data.attr_equip.get(attr, 0)
 		_attr_hidden[attr + "_temp"]  = data.attr_temp.get(attr, 0)
+		# 加減值會在 _recalc_attr 中自動計算
 		_recalc_attr(attr)
+
+	# 複合數值的調整值
 	for name in CharacterData.COMPOUND_NAMES:
 		_compound_hidden[name + "_adj"]  = data.compound_adj.get(name, 0)
 		_compound_hidden[name + "_temp"] = data.compound_temp.get(name, 0)
-		_recalc_compound(name)
+
+	# 屬性載入完成後，更新所有複合數值
+	_recalc_all_compounds()
 	for name in CharacterData.RESIST_NAMES:
 		_resist_hidden[name + "_adj"]  = data.resist_adj.get(name, 0)
 		_resist_hidden[name + "_temp"] = data.resist_temp.get(name, 0)
 		_recalc_resist(name)
-	_soul_labels["強韌"].text = str(data.fortitude)
-	_soul_labels["精神"].text = str(data.spirit)
-	_soul_labels["靈魂"].text = str(data.soul)
+	# 強韌/精神/靈魂：自動從屬性計算
+	_soul_labels["強韌"].text = str(data.calc_fortitude())
+	_soul_labels["精神"].text = str(data.calc_spirit())
+	_soul_labels["靈魂"].text = str(data.calc_soul())
 	# 物理/元素抗性
 	var elem_map = {
 		"法抗": data.magic_resist, "物抗": data.phys_resist,
@@ -992,8 +1069,9 @@ func flush_to_data() -> void:
 	_data.alignment  = _align_edit.text
 	_data.cp         = int(_cp_edit.text) if _cp_edit.text.is_valid_int() else 0
 	for attr in CharacterData.ATTR_NAMES:
-		_data.attr_base[attr]  = int(_attr_inputs[attr+"_base"].text)  if _attr_inputs[attr+"_base"].text.is_valid_int()  else 0
-		_data.attr_bonus[attr] = int(_attr_inputs[attr+"_bonus"].text) if _attr_inputs[attr+"_bonus"].text.is_valid_int() else 0
+		_data.attr_base[attr] = int(_attr_inputs[attr+"_base"].text) if _attr_inputs[attr+"_base"].text.is_valid_int() else 13
+		# bonus 現在由加減值公式自動計算，不再手動設定
+		_data.attr_bonus[attr] = _data.attr_modifier(attr)
 		# 裝備/臨時從隱藏字典回寫，保留外部系統寫入的值
 		_data.attr_equip[attr] = _attr_hidden.get(attr + "_equip", 0)
 		_data.attr_temp[attr]  = _attr_hidden.get(attr + "_temp",  0)
@@ -1003,9 +1081,10 @@ func flush_to_data() -> void:
 	for name in CharacterData.RESIST_NAMES:
 		_data.resist_adj[name]  = _resist_hidden.get(name + "_adj",  0)
 		_data.resist_temp[name] = _resist_hidden.get(name + "_temp", 0)
-	_data.fortitude = int(_soul_labels["強韌"].text) if _soul_labels["強韌"].text.is_valid_int() else 0
-	_data.spirit    = int(_soul_labels["精神"].text) if _soul_labels["精神"].text.is_valid_int() else 0
-	_data.soul      = int(_soul_labels["靈魂"].text) if _soul_labels["靈魂"].text.is_valid_int() else 0
+	# 強韌/精神/靈魂：從屬性自動計算
+	_data.fortitude = _data.calc_fortitude()
+	_data.spirit    = _data.calc_spirit()
+	_data.soul      = _data.calc_soul()
 	_data.magic_resist    = int(_elem_resist_inputs["法抗"].text) if _elem_resist_inputs["法抗"].text.is_valid_int() else 0
 	_data.phys_resist     = int(_elem_resist_inputs["物抗"].text) if _elem_resist_inputs["物抗"].text.is_valid_int() else 0
 	_data.res_fire        = int(_elem_resist_inputs["火"].text)   if _elem_resist_inputs["火"].text.is_valid_int()   else 0

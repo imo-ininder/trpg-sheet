@@ -23,16 +23,38 @@ const ATTR_NAMES = ["STR", "DEX", "SKI", "CON", "RES", "INT", "WIS", "CHA", "SPI
 func attr_total(attr: String) -> int:
 	return attr_base.get(attr,0) + attr_equip.get(attr,0) + attr_temp.get(attr,0) + attr_bonus.get(attr,0)
 
+# 加減值計算：(基礎值 - 13) / 2，無條件進位
+func attr_modifier(attr: String) -> int:
+	var base = attr_base.get(attr, 13)
+	return int(ceil((base - 13) / 2.0))
+
 # ── 判定複合數值 ──────────────────────────────────
 const COMPOUND_NAMES = ["戰鬥", "運動", "操作", "感知", "知識", "交涉"]
 
 @export var compound_adj:  Dictionary = { "戰鬥":0,"運動":0,"操作":0,"感知":0,"知識":0,"交涉":0 }
 @export var compound_temp: Dictionary = { "戰鬥":0,"運動":0,"操作":0,"感知":0,"知識":0,"交涉":0 }
-# 公式待補：先用固定 base=39 + adj + temp
-var compound_base: int = 39
+
+# 判定複合數值計算（使用總和，即最終數值）
+func calc_compound(name: String) -> int:
+	var base_value = 0
+	match name:
+		"戰鬥":
+			base_value = attr_total("STR") + attr_total("DEX") + attr_total("SKI")
+		"運動":
+			base_value = attr_total("DEX") + attr_total("SKI") + attr_total("CON")
+		"操作":
+			base_value = attr_total("SKI") + attr_total("INT") + attr_total("WIS")
+		"感知":
+			base_value = attr_total("RES") + attr_total("INT") + attr_total("SPI")
+		"知識":
+			base_value = int(floor((attr_total("INT") + attr_total("WIS")) * 1.5))
+		"交涉":
+			base_value = attr_total("WIS") + attr_total("CHA") + attr_total("SPI")
+
+	return base_value + compound_adj.get(name, 0) + compound_temp.get(name, 0)
 
 func compound_total(name: String) -> int:
-	return compound_base + compound_adj.get(name,0) + compound_temp.get(name,0)
+	return calc_compound(name)
 
 # ── 抗性數值 ──────────────────────────────────────
 const RESIST_NAMES = ["抗毒素", "抗控制", "抗轉化", "抗噴吐", "抗魔法"]
@@ -67,6 +89,11 @@ func mp_max() -> int: return mp_base + mp_bonus + mp_cp
 @export var fortitude: int = 65
 @export var spirit: int = 65
 @export var soul: int = 65
+
+# 強韌/精神/靈魂自動計算
+func calc_fortitude() -> int: return attr_base.get("CON", 13) * 5
+func calc_spirit() -> int: return attr_base.get("RES", 13) * 5
+func calc_soul() -> int: return attr_base.get("SPI", 13) * 5
 
 # 元素抗性
 @export var res_fire: int = 0
