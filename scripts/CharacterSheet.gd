@@ -917,7 +917,7 @@ func _recalc_attr(attr: String) -> void:
 	var total = base_val
 	total += _attr_hidden.get(attr + "_equip", 0)
 	total += _attr_hidden.get(attr + "_temp",  0)
-	# 注意：加減值已經包含在 attr_modifier 計算中，這裡不重複加
+	total += modifier  # 加上加減值
 
 	# 更新總和顯示
 	if _attr_totals.has(attr):
