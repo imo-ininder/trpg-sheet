@@ -177,26 +177,30 @@ func _build_attrs(panel: PanelContainer) -> void:
 		card_vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		card.add_child(card_vb)
 
-		# 屬性名稱（小標題）
+		# 屬性名稱（更大）
 		var name_lbl = Label.new()
 		name_lbl.text = attr
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 13)
+		name_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_lbl.add_theme_font_size_override("font_size", 15)
+		name_lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		card_vb.add_child(name_lbl)
 
-		# 總和（大數字，最顯眼）
+		# 總和（大數字，最顯眼，填滿垂直空間）
 		var total_lbl = Label.new()
 		total_lbl.text = "13"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		total_lbl.add_theme_font_size_override("font_size", 20)
+		total_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		total_lbl.add_theme_font_size_override("font_size", 24)
+		total_lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		_attr_totals[attr] = total_lbl
 		card_vb.add_child(total_lbl)
 
 		card_vb.add_child(HSeparator.new())
 
-		# 基礎 / 加值 輸入格
+		# 基礎 / 加值 輸入格（縮小）
 		var row = HBoxContainer.new()
-		row.add_theme_constant_override("separation", 4)
+		row.add_theme_constant_override("separation", 3)
 		card_vb.add_child(row)
 
 		for pair in [["base", "基礎"], ["bonus", "加值"]]:
@@ -207,14 +211,15 @@ func _build_attrs(panel: PanelContainer) -> void:
 			col.add_theme_constant_override("separation", 1)
 			var sub_lbl = Label.new()
 			sub_lbl.text = label_text
-			sub_lbl.add_theme_font_size_override("font_size", 10)
+			sub_lbl.add_theme_font_size_override("font_size", 9)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			col.add_child(sub_lbl)
 			var le = LineEdit.new()
 			le.text = "13" if suffix == "base" else "0"
 			le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			le.add_theme_font_size_override("font_size", 12)
+			le.add_theme_font_size_override("font_size", 10)
+			le.custom_minimum_size.y = 22
 			_attr_inputs[attr + "_" + suffix] = le
 			le.text_changed.connect(func(_v): _recalc_attr(attr))
 			col.add_child(le)
@@ -435,27 +440,29 @@ func _build_resources(parent: VBoxContainer) -> void:
 		# 現值 / 最大值 顯示列
 		var cur_max_hb = HBoxContainer.new()
 		cur_max_hb.alignment = BoxContainer.ALIGNMENT_CENTER
-		cur_max_hb.add_theme_constant_override("separation", 4)
+		cur_max_hb.add_theme_constant_override("separation", 2)
 		card_vb.add_child(cur_max_hb)
 
 		var cur_edit = LineEdit.new()
 		cur_edit.text = "0"
 		cur_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cur_edit.add_theme_font_size_override("font_size", 18)
-		cur_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		cur_edit.custom_minimum_size.x = 60
 		if key == "hp": _hp_inputs["current"] = cur_edit
 		else:           _mp_inputs["current"] = cur_edit
 		cur_max_hb.add_child(cur_edit)
 
 		var slash = Label.new()
 		slash.text = "/"
+		slash.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		slash.add_theme_font_size_override("font_size", 18)
 		cur_max_hb.add_child(slash)
 
 		var max_lbl = Label.new()
 		max_lbl.text = "0"
+		max_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		max_lbl.add_theme_font_size_override("font_size", 18)
-		max_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		max_lbl.custom_minimum_size.x = 60
 		if key == "hp": _hp_inputs["max_lbl"] = max_lbl
 		else:           _mp_inputs["max_lbl"] = max_lbl
 		cur_max_hb.add_child(max_lbl)
