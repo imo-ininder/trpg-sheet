@@ -55,6 +55,7 @@ func _build_ui() -> void:
 func _build_topbar(parent: VBoxContainer) -> void:
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 8)
+	hbox.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	parent.add_child(hbox)
 
 	# [欄位名, 變數名, 最小寬度]
@@ -98,6 +99,7 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 8)
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	parent.add_child(hbox)
 
 	# 欄 1：屬性（高度自適應，不撐滿整欄）
