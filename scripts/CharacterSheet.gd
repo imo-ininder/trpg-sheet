@@ -174,14 +174,14 @@ func _build_attrs(panel: PanelContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = attr
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 11)
+		name_lbl.add_theme_font_size_override("font_size", 13)
 		card_vb.add_child(name_lbl)
 
 		# 總和（大數字，最顯眼）
 		var total_lbl = Label.new()
 		total_lbl.text = "13"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		total_lbl.add_theme_font_size_override("font_size", 26)
+		total_lbl.add_theme_font_size_override("font_size", 20)
 		_attr_totals[attr] = total_lbl
 		card_vb.add_child(total_lbl)
 
@@ -200,14 +200,14 @@ func _build_attrs(panel: PanelContainer) -> void:
 			col.add_theme_constant_override("separation", 1)
 			var sub_lbl = Label.new()
 			sub_lbl.text = label_text
-			sub_lbl.add_theme_font_size_override("font_size", 9)
+			sub_lbl.add_theme_font_size_override("font_size", 10)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			col.add_child(sub_lbl)
 			var le = LineEdit.new()
 			le.text = "13" if suffix == "base" else "0"
 			le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			le.add_theme_font_size_override("font_size", 11)
+			le.add_theme_font_size_override("font_size", 12)
 			_attr_inputs[attr + "_" + suffix] = le
 			le.text_changed.connect(func(_v): _recalc_attr(attr))
 			col.add_child(le)
@@ -241,13 +241,13 @@ func _build_compound(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = name
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 10)
+		name_lbl.add_theme_font_size_override("font_size", 11)
 		card_vb.add_child(name_lbl)
 
 		var total_lbl = Label.new()
 		total_lbl.text = "39"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		total_lbl.add_theme_font_size_override("font_size", 22)
+		total_lbl.add_theme_font_size_override("font_size", 18)
 		_compound_totals[name] = total_lbl
 		card_vb.add_child(total_lbl)
 
@@ -279,13 +279,13 @@ func _build_resists(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = name
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 10)
+		name_lbl.add_theme_font_size_override("font_size", 11)
 		card_vb.add_child(name_lbl)
 
 		var total_lbl = Label.new()
 		total_lbl.text = "26"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		total_lbl.add_theme_font_size_override("font_size", 22)
+		total_lbl.add_theme_font_size_override("font_size", 18)
 		_resist_totals[name] = total_lbl
 		card_vb.add_child(total_lbl)
 
@@ -316,7 +316,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = res_name
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 11)
+		name_lbl.add_theme_font_size_override("font_size", 12)
 		card_vb.add_child(name_lbl)
 
 		# 現值 / 最大值 顯示列
@@ -328,7 +328,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 		var cur_edit = LineEdit.new()
 		cur_edit.text = "0"
 		cur_edit.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		cur_edit.add_theme_font_size_override("font_size", 22)
+		cur_edit.add_theme_font_size_override("font_size", 18)
 		cur_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		if key == "hp": _hp_inputs["current"] = cur_edit
 		else:           _mp_inputs["current"] = cur_edit
@@ -336,12 +336,12 @@ func _build_resources(parent: VBoxContainer) -> void:
 
 		var slash = Label.new()
 		slash.text = "/"
-		slash.add_theme_font_size_override("font_size", 22)
+		slash.add_theme_font_size_override("font_size", 18)
 		cur_max_hb.add_child(slash)
 
 		var max_lbl = Label.new()
 		max_lbl.text = "0"
-		max_lbl.add_theme_font_size_override("font_size", 22)
+		max_lbl.add_theme_font_size_override("font_size", 18)
 		max_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		if key == "hp": _hp_inputs["max_lbl"] = max_lbl
 		else:           _mp_inputs["max_lbl"] = max_lbl
@@ -362,14 +362,14 @@ func _build_resources(parent: VBoxContainer) -> void:
 			col.add_theme_constant_override("separation", 1)
 			var sub_lbl = Label.new()
 			sub_lbl.text = label_text
-			sub_lbl.add_theme_font_size_override("font_size", 9)
+			sub_lbl.add_theme_font_size_override("font_size", 10)
 			sub_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			col.add_child(sub_lbl)
 			var le = LineEdit.new()
 			le.text = "13" if suffix == "base" else "0"
 			le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-			le.add_theme_font_size_override("font_size", 11)
+			le.add_theme_font_size_override("font_size", 12)
 			if key == "hp": _hp_inputs[suffix] = le
 			else:           _mp_inputs[suffix] = le
 			le.text_changed.connect(func(_v): _recalc_resource(key))
@@ -401,19 +401,19 @@ func _build_combat(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = f[0]
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 11)
+		name_lbl.add_theme_font_size_override("font_size", 12)
 		card_vb.add_child(name_lbl)
 
 		var le = LineEdit.new()
 		le.text = f[1]
 		le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		le.add_theme_font_size_override("font_size", 24)
+		le.add_theme_font_size_override("font_size", 18)
 		card_vb.add_child(le)
 
 		grid.add_child(card)
 
-# ── 物理 / 元素抗性（卡片式 4×2）────────────────────
+# ── 物理 / 元素抗性（卡片式 5×2）────────────────────
 func _build_phys_elem_resist(parent: VBoxContainer) -> void:
 	var panel = _make_panel()
 	panel.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
@@ -421,14 +421,14 @@ func _build_phys_elem_resist(parent: VBoxContainer) -> void:
 	var vb = _panel_vbox(panel, "物理 / 元素抗性")
 
 	var grid = GridContainer.new()
-	grid.columns = 4
-	grid.add_theme_constant_override("h_separation", 6)
-	grid.add_theme_constant_override("v_separation", 6)
+	grid.columns = 5
+	grid.add_theme_constant_override("h_separation", 4)
+	grid.add_theme_constant_override("v_separation", 4)
 	vb.add_child(grid)
 
 	var items = [
-		["法抗","0"],["物抗","0"],
-		["火","0"],["冰","0"],["電","0"],["酸","0"],["音","0"],["心","0"],
+		["法抗","0"],["物抗","0"],["火","0"],["冰","0"],["電","0"],
+		["酸","0"],["音","0"],["心","0"],["光","0"],["暗","0"],
 	]
 	for item in items:
 		var name      = item[0]
@@ -443,14 +443,14 @@ func _build_phys_elem_resist(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = name
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 10)
+		name_lbl.add_theme_font_size_override("font_size", 11)
 		card_vb.add_child(name_lbl)
 
 		var le = LineEdit.new()
 		le.text = default_v
 		le.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		le.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		le.add_theme_font_size_override("font_size", 20)
+		le.add_theme_font_size_override("font_size", 16)
 		_elem_resist_inputs[name] = le
 		card_vb.add_child(le)
 
@@ -482,7 +482,7 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 		var name_lbl = Label.new()
 		name_lbl.text = name
 		name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_lbl.add_theme_font_size_override("font_size", 11)
+		name_lbl.add_theme_font_size_override("font_size", 12)
 		card_vb.add_child(name_lbl)
 
 		# 大數字唯讀顯示
@@ -490,7 +490,7 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 		lbl.text = default_v
 		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 24)
+		lbl.add_theme_font_size_override("font_size", 18)
 		_soul_labels[name] = lbl
 		card_vb.add_child(lbl)
 
@@ -741,6 +741,7 @@ func load_data(data: CharacterData) -> void:
 		"法抗": data.magic_resist, "物抗": data.phys_resist,
 		"火": data.res_fire,  "冰": data.res_ice,  "電": data.res_lightning,
 		"酸": data.res_acid,  "音": data.res_sound, "心": data.res_psychic,
+		"光": data.res_light, "暗": data.res_dark,
 	}
 	for k in elem_map:
 		if _elem_resist_inputs.has(k):
@@ -810,6 +811,8 @@ func flush_to_data() -> void:
 	_data.res_acid        = int(_elem_resist_inputs["酸"].text)   if _elem_resist_inputs["酸"].text.is_valid_int()   else 0
 	_data.res_sound       = int(_elem_resist_inputs["音"].text)   if _elem_resist_inputs["音"].text.is_valid_int()   else 0
 	_data.res_psychic     = int(_elem_resist_inputs["心"].text)   if _elem_resist_inputs["心"].text.is_valid_int()   else 0
+	_data.res_light       = int(_elem_resist_inputs["光"].text)   if _elem_resist_inputs["光"].text.is_valid_int()   else 0
+	_data.res_dark        = int(_elem_resist_inputs["暗"].text)   if _elem_resist_inputs["暗"].text.is_valid_int()   else 0
 	# 回寫裝備（包含主要 + 擴充槽位）
 	var all_slots = CharacterData.EQUIP_SLOTS + CharacterData.EQUIP_SLOTS_EXPANSION
 	for slot in all_slots:

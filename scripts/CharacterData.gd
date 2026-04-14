@@ -75,6 +75,8 @@ func mp_max() -> int: return mp_base + mp_bonus + mp_cp
 @export var res_acid: int = 0
 @export var res_sound: int = 0
 @export var res_psychic: int = 0
+@export var res_light: int = 0
+@export var res_dark: int = 0
 
 # ── 施法 ──────────────────────────────────────────
 @export var caster_level: int = 0
