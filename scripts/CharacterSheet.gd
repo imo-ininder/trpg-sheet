@@ -128,6 +128,7 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	# 欄 4：裝備（2 欄 × 10 行）
 	var col4 = _make_panel()
 	col4.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	col4.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_build_equip(col4)
 	hbox.add_child(col4)
 
@@ -490,6 +491,7 @@ func _build_equip(panel: PanelContainer) -> void:
 	grid.add_theme_constant_override("h_separation", 12)
 	grid.add_theme_constant_override("v_separation", 4)
 	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	vb.add_child(grid)
 
 	# 合併所有槽位（12 個主要 + 8 個擴充）
@@ -499,6 +501,7 @@ func _build_equip(panel: PanelContainer) -> void:
 		var hbox = HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 6)
 		hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 		# 槽位名稱標籤（左側）
 		var lbl = Label.new()
@@ -511,6 +514,7 @@ func _build_equip(panel: PanelContainer) -> void:
 		# 裝備選擇下拉選單（右側，文字置中）
 		var opt = OptionButton.new()
 		opt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		opt.size_flags_vertical = Control.SIZE_EXPAND_FILL
 		opt.add_item("（空）")
 		opt.add_theme_font_size_override("font_size", 10)
 		opt.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -538,6 +542,8 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	hbox.add_child(panel)
 	var vb = _panel_vbox(panel)
+	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vb.size_flags_vertical = Control.SIZE_EXPAND_FILL
 
 	# 類別標題列：左側文字，右側「+」按鈕（固定，不捲動）
 	var title_row = HBoxContainer.new()
