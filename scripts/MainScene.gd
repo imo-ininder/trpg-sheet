@@ -37,13 +37,13 @@ func _build_tab_buttons() -> void:
 	top_bar.move_child(_tab_equip, 1)
 
 	_tab_char.pressed.connect(func():
-		_tab_char.button_pressed  = true
+		_tab_char.button_pressed = true
 		_tab_equip.button_pressed = false
 		sheet.switch_tab("腳色")
 	)
 	_tab_equip.pressed.connect(func():
 		_tab_equip.button_pressed = true
-		_tab_char.button_pressed  = false
+		_tab_char.button_pressed = false
 		sheet.switch_tab("裝備")
 	)
 

@@ -7,19 +7,18 @@ extends Control
 var _data: CharacterData = null
 
 # 用來追蹤每個 UI 元件，方便 flush_to_data 時回寫
-var _attr_inputs: Dictionary = {}       # "STR_base", "STR_modifier" -> LineEdit / Label
-var _attr_totals: Dictionary = {}       # "STR" -> Label
+var _attr_inputs: Dictionary = {} # "STR_base", "STR_modifier" -> LineEdit / Label
+var _attr_totals: Dictionary = {} # "STR" -> Label
 var _compound_totals: Dictionary = {}
 var _resist_totals: Dictionary = {}
-var _soul_labels: Dictionary = {}       # "強韌"/"精神"/"靈魂" -> Label（唯讀顯示）
+var _soul_labels: Dictionary = {} # "強韌"/"精神"/"靈魂" -> Label（唯讀顯示）
 var _elem_resist_inputs: Dictionary = {} # "法抗"/"物抗"/"火"... -> LineEdit
 var _hp_inputs: Dictionary = {}
 var _mp_inputs: Dictionary = {}
-# 裝備 tab UI 已移至 EquipTabPanel（scripts/ui/EquipTabPanel.gd）
 
-var _skill_rows: Dictionary = {}        # cat -> Array of {name, diff, level LineEdit}
-var _skill_scrolls: Dictionary = {}     # cat -> ScrollContainer（用於動態調整高度）
-var _currency_display: Label            # 頂部貨幣顯示標籤（唯讀）
+var _skill_rows: Dictionary = {} # cat -> Array of {name, diff, level LineEdit}
+var _skill_scrolls: Dictionary = {} # cat -> ScrollContainer（用於動態調整高度）
+var _currency_display: Label # 頂部貨幣顯示標籤（唯讀）
 var _name_edit: LineEdit
 var _race_edit: LineEdit
 var _class_edit: LineEdit
@@ -28,9 +27,9 @@ var _align_edit: LineEdit
 var _cp_edit: LineEdit
 
 # 技能列常數
-const SKILL_ROW_HEIGHT = 30  # 每行高度（28px + 2px separation）
-const SKILL_HEADER_HEIGHT = 70  # 標題 + 標頭 + spacing
-const SKILL_DEFAULT_ROWS = 10  # 預設行數
+const SKILL_ROW_HEIGHT = 30 # 每行高度（28px + 2px separation）
+const SKILL_HEADER_HEIGHT = 70 # 標題 + 標頭 + spacing
+const SKILL_DEFAULT_ROWS = 10 # 預設行數
 
 # ── 建立 UI ──────────────────────────────────────
 func _ready() -> void:
@@ -41,9 +40,9 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	var margin = MarginContainer.new()
-	margin.add_theme_constant_override("margin_left",  16)
+	margin.add_theme_constant_override("margin_left", 16)
 	margin.add_theme_constant_override("margin_right", 16)
-	margin.add_theme_constant_override("margin_top",    8)
+	margin.add_theme_constant_override("margin_top", 8)
 	margin.add_theme_constant_override("margin_bottom", 8)
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(margin)
@@ -51,7 +50,7 @@ func _build_ui() -> void:
 	var root = VBoxContainer.new()
 	root.add_theme_constant_override("separation", 8)
 	root.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	root.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	root.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(root)
 
 	_build_topbar(root)
@@ -66,13 +65,13 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_page_char = VBoxContainer.new()
 	_page_char.add_theme_constant_override("separation", 8)
 	_page_char.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_page_char.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_page_char.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(_page_char)
 
 	_page_equip = HBoxContainer.new()
 	_page_equip.add_theme_constant_override("separation", 12)
 	_page_equip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_page_equip.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	_page_equip.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_page_equip.visible = false
 	parent.add_child(_page_equip)
 
@@ -88,7 +87,7 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_build_special_abilities_section(_equip_tab_panel._main_hbox)
 
 func switch_tab(tab: String) -> void:
-	_page_char.visible  = (tab == "腳色")
+	_page_char.visible = (tab == "腳色")
 	_page_equip.visible = (tab == "裝備")
 
 # ── 頂部：基本資料 ────────────────────────────────
@@ -101,11 +100,11 @@ func _build_topbar(parent: VBoxContainer) -> void:
 	# [欄位名, 變數名, 最小寬度]
 	var fields = [
 		["腳色名稱", "_name_edit", 150],
-		["種族",     "_race_edit",  100],
-		["職業",     "_class_edit", 100],
-		["年齡",     "_age_edit",    60],
-		["陣營",     "_align_edit",  80],
-		["CP",       "_cp_edit",     60],
+		["種族", "_race_edit", 100],
+		["職業", "_class_edit", 100],
+		["年齡", "_age_edit", 60],
+		["陣營", "_align_edit", 80],
+		["CP", "_cp_edit", 60],
 	]
 	for f in fields:
 		var vb = VBoxContainer.new()
@@ -145,7 +144,7 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	# 欄 1：屬性（填滿高度）
 	var col1 = _make_panel()
 	col1.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	col1.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	col1.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_build_attrs(col1)
 	hbox.add_child(col1)
 
@@ -177,14 +176,14 @@ func _build_main_row(parent: VBoxContainer) -> void:
 	# 欄 4：職業專屬 stats placeholder
 	var col4 = _make_panel()
 	col4.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	col4.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	col4.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	hbox.add_child(col4)
 	var col4_vb = _panel_vbox(col4, "職業 Stats")
 	var placeholder_lbl = Label.new()
 	placeholder_lbl.text = "（待實作）"
 	placeholder_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	placeholder_lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-	placeholder_lbl.size_flags_vertical  = Control.SIZE_EXPAND_FILL
+	placeholder_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	placeholder_lbl.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	placeholder_lbl.add_theme_font_size_override("font_size", 13)
 	col4_vb.add_child(placeholder_lbl)
 
@@ -272,7 +271,7 @@ func _build_attrs(panel: PanelContainer) -> void:
 		mod_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		mod_label.add_theme_font_size_override("font_size", 10)
 		mod_label.custom_minimum_size.y = 22
-		_attr_inputs[attr + "_modifier"] = mod_label  # 儲存為 Label
+		_attr_inputs[attr + "_modifier"] = mod_label # 儲存為 Label
 		mod_col.add_child(mod_label)
 		row.add_child(mod_col)
 
@@ -461,7 +460,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 
 	for res in [["生命", "hp"], ["魔力", "mp"]]:
 		var res_name = res[0]
-		var key      = res[1]
+		var key = res[1]
 
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -488,7 +487,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 		cur_edit.add_theme_font_size_override("font_size", 18)
 		cur_edit.custom_minimum_size.x = 60
 		if key == "hp": _hp_inputs["current"] = cur_edit
-		else:           _mp_inputs["current"] = cur_edit
+		else: _mp_inputs["current"] = cur_edit
 		cur_max_hb.add_child(cur_edit)
 
 		var slash = Label.new()
@@ -503,7 +502,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 		max_lbl.add_theme_font_size_override("font_size", 18)
 		max_lbl.custom_minimum_size.x = 60
 		if key == "hp": _hp_inputs["max_lbl"] = max_lbl
-		else:           _mp_inputs["max_lbl"] = max_lbl
+		else: _mp_inputs["max_lbl"] = max_lbl
 		cur_max_hb.add_child(max_lbl)
 
 		card_vb.add_child(HSeparator.new())
@@ -514,7 +513,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 		card_vb.add_child(sub_row)
 
 		for pair in [["base", "基礎"], ["bonus", "獎勵"], ["cp", "CP"]]:
-			var suffix     = pair[0]
+			var suffix = pair[0]
 			var label_text = pair[1]
 			var col = VBoxContainer.new()
 			col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -532,7 +531,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 				value_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 				value_lbl.add_theme_font_size_override("font_size", 12)
 				if key == "hp": _hp_inputs[suffix] = value_lbl
-				else:           _mp_inputs[suffix] = value_lbl
+				else: _mp_inputs[suffix] = value_lbl
 				col.add_child(value_lbl)
 			else:
 				# 獎勵和 CP 可編輯
@@ -542,7 +541,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 				le.alignment = HORIZONTAL_ALIGNMENT_CENTER
 				le.add_theme_font_size_override("font_size", 12)
 				if key == "hp": _hp_inputs[suffix] = le
-				else:           _mp_inputs[suffix] = le
+				else: _mp_inputs[suffix] = le
 				le.text_changed.connect(func(_v): _recompute())
 				col.add_child(le)
 
@@ -599,11 +598,11 @@ func _build_phys_elem_resist(parent: VBoxContainer) -> void:
 	vb.add_child(grid)
 
 	var items = [
-		["法抗","0"],["物抗","0"],["火","0"],["冰","0"],["電","0"],
-		["酸","0"],["音","0"],["心","0"],["光","0"],["暗","0"],
+		["法抗", "0"], ["物抗", "0"], ["火", "0"], ["冰", "0"], ["電", "0"],
+		["酸", "0"], ["音", "0"], ["心", "0"], ["光", "0"], ["暗", "0"],
 	]
 	for item in items:
-		var name      = item[0]
+		var name = item[0]
 		var default_v = item[1]
 
 		var card = PanelContainer.new()
@@ -642,7 +641,7 @@ func _build_soul_stats(parent: VBoxContainer) -> void:
 	vb.add_child(grid)
 
 	for pair in [["強韌", "65"], ["精神", "65"], ["靈魂", "65"]]:
-		var name      = pair[0]
+		var name = pair[0]
 		var default_v = pair[1]
 
 		var card = PanelContainer.new()
@@ -696,7 +695,7 @@ func _build_soul_stats_section(parent: VBoxContainer) -> void:
 	section_vb.add_child(grid)
 
 	for pair in [["強韌", "65"], ["精神", "65"], ["靈魂", "65"]]:
-		var name      = pair[0]
+		var name = pair[0]
 		var default_v = pair[1]
 
 		var card = PanelContainer.new()
@@ -729,7 +728,7 @@ func _build_skill_row(parent: VBoxContainer) -> void:
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 8)
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	parent.add_child(hbox)
 
 	for cat in CharacterData.SKILL_CATS:
@@ -740,7 +739,7 @@ func _build_skill_row(parent: VBoxContainer) -> void:
 func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	var panel = _make_panel()
 	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	panel.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	hbox.add_child(panel)
 	var vb = _panel_vbox(panel)
 	vb.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -771,7 +770,7 @@ func _build_one_skill_panel(hbox: HBoxContainer, cat: String) -> void:
 	# ScrollContainer：標題/標頭固定，只有列在此捲動
 	var scroll = ScrollContainer.new()
 	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
 	# 設定初始最小高度 = 預設 10 行
@@ -811,9 +810,9 @@ func _add_skill_row(cat: String, container: VBoxContainer) -> void:
 	row.add_child(name_le)
 
 	var diff_le = _make_number_edit(36)
-	var lvl_le  = _make_number_edit(36)
+	var lvl_le = _make_number_edit(36)
 	diff_le.custom_minimum_size.y = 28
-	lvl_le.custom_minimum_size.y  = 28
+	lvl_le.custom_minimum_size.y = 28
 	row.add_child(diff_le)
 	row.add_child(lvl_le)
 
@@ -852,7 +851,7 @@ func _update_skill_scroll_height(cat: String) -> void:
 	# 在 _ready 之後才能取得實際高度，所以這裡使用 deferred call
 	await get_tree().process_frame
 
-	var panel = scroll.get_parent().get_parent()  # scroll -> vb -> panel
+	var panel = scroll.get_parent().get_parent() # scroll -> vb -> panel
 	var available_height = panel.size.y - SKILL_HEADER_HEIGHT
 
 	# 如果需要的高度小於可用高度，就設定為需要的高度
@@ -903,10 +902,10 @@ func _apply_stats(stats: Dictionary) -> void:
 		if mod_lbl:
 			mod_lbl.text = str(stats.get(attr + "_modifier", 0))
 	# HP / MP readonly labels
-	if _hp_inputs.has("base"):    _hp_inputs["base"].text    = str(stats.get("hp_base", 0))
-	if _hp_inputs.has("max_lbl"): _hp_inputs["max_lbl"].text = str(stats.get("hp_max",  0))
-	if _mp_inputs.has("base"):    _mp_inputs["base"].text    = str(stats.get("mp_base", 0))
-	if _mp_inputs.has("max_lbl"): _mp_inputs["max_lbl"].text = str(stats.get("mp_max",  0))
+	if _hp_inputs.has("base"): _hp_inputs["base"].text = str(stats.get("hp_base", 0))
+	if _hp_inputs.has("max_lbl"): _hp_inputs["max_lbl"].text = str(stats.get("hp_max", 0))
+	if _mp_inputs.has("base"): _mp_inputs["base"].text = str(stats.get("mp_base", 0))
+	if _mp_inputs.has("max_lbl"): _mp_inputs["max_lbl"].text = str(stats.get("mp_max", 0))
 	# 複合數值
 	for name in CharacterData.COMPOUND_NAMES:
 		if _compound_totals.has(name):
@@ -917,8 +916,8 @@ func _apply_stats(stats: Dictionary) -> void:
 			_resist_totals[name].text = str(stats.get("resist_" + name, 0))
 	# 靈魂數值
 	if _soul_labels.has("強韌"): _soul_labels["強韌"].text = str(stats.get("fortitude", 0))
-	if _soul_labels.has("精神"): _soul_labels["精神"].text = str(stats.get("spirit",    0))
-	if _soul_labels.has("靈魂"): _soul_labels["靈魂"].text = str(stats.get("soul",      0))
+	if _soul_labels.has("精神"): _soul_labels["精神"].text = str(stats.get("spirit", 0))
+	if _soul_labels.has("靈魂"): _soul_labels["靈魂"].text = str(stats.get("soul", 0))
 	_update_special_abilities(stats)
 
 ## 更新特殊能力顯示
@@ -962,12 +961,12 @@ func _update_special_abilities(stats: Dictionary) -> void:
 # ── 資料載入 / 回寫 ───────────────────────────────
 func load_data(data: CharacterData) -> void:
 	_data = data
-	_name_edit.text  = data.char_name
-	_race_edit.text  = data.race
+	_name_edit.text = data.char_name
+	_race_edit.text = data.race
 	_class_edit.text = data.char_class
-	_age_edit.text   = data.age
+	_age_edit.text = data.age
 	_align_edit.text = data.alignment
-	_cp_edit.text    = str(data.cp)
+	_cp_edit.text = str(data.cp)
 	# 屬性 base（唯讀欄位由 _recompute → _apply_stats 更新）
 	for attr in CharacterData.ATTR_NAMES:
 		_attr_inputs[attr + "_base"].text = str(data.attr_base.get(attr, 13))
@@ -975,8 +974,8 @@ func load_data(data: CharacterData) -> void:
 	# 物理/元素抗性（user-editable，由使用者直接輸入）
 	var elem_keys := {
 		"法抗": data.magic_resist, "物抗": data.phys_resist,
-		"火": data.res_fire,  "冰": data.res_ice,  "電": data.res_lightning,
-		"酸": data.res_acid,  "音": data.res_sound, "心": data.res_psychic,
+		"火": data.res_fire, "冰": data.res_ice, "電": data.res_lightning,
+		"酸": data.res_acid, "音": data.res_sound, "心": data.res_psychic,
 		"光": data.res_light, "暗": data.res_dark,
 	}
 	for k in elem_keys:
@@ -986,15 +985,15 @@ func load_data(data: CharacterData) -> void:
 	# 貨幣顯示
 	_currency_display.text = "白金:%d  金:%d  銀:%d  銅:%d" % [
 		data.currency_platinum, data.currency_gold,
-		data.currency_silver,   data.currency_copper
+		data.currency_silver, data.currency_copper
 	]
 
 	# HP/MP user-input 欄位
 	_hp_inputs["bonus"].text = str(data.hp_bonus)
-	_hp_inputs["cp"].text    = str(data.hp_cp)
+	_hp_inputs["cp"].text = str(data.hp_cp)
 	_hp_inputs["current"].text = str(data.hp_current)
 	_mp_inputs["bonus"].text = str(data.mp_bonus)
-	_mp_inputs["cp"].text    = str(data.mp_cp)
+	_mp_inputs["cp"].text = str(data.mp_cp)
 	_mp_inputs["current"].text = str(data.mp_current)
 
 	# 裝備 tab
@@ -1006,26 +1005,26 @@ func load_data(data: CharacterData) -> void:
 
 func flush_to_data() -> void:
 	if _data == null: return
-	_data.char_name  = _name_edit.text
-	_data.race       = _race_edit.text
+	_data.char_name = _name_edit.text
+	_data.race = _race_edit.text
 	_data.char_class = _class_edit.text
-	_data.age        = _age_edit.text
-	_data.alignment  = _align_edit.text
-	_data.cp         = int(_cp_edit.text) if _cp_edit.text.is_valid_int() else 0
+	_data.age = _age_edit.text
+	_data.alignment = _align_edit.text
+	_data.cp = int(_cp_edit.text) if _cp_edit.text.is_valid_int() else 0
 	for attr in CharacterData.ATTR_NAMES:
-		_data.attr_base[attr]  = int(_attr_inputs[attr+"_base"].text) if _attr_inputs[attr+"_base"].text.is_valid_int() else 13
-		_data.attr_bonus[attr] = _data.attr_modifier(attr)  # modifier 由 base 推算
+		_data.attr_base[attr] = int(_attr_inputs[attr + "_base"].text) if _attr_inputs[attr + "_base"].text.is_valid_int() else 13
+		_data.attr_bonus[attr] = _data.attr_modifier(attr) # modifier 由 base 推算
 	# elem/phys/magic resists（user-editable base 值，StatEngine 會加上裝備加成）
-	_data.magic_resist    = int(_elem_resist_inputs["法抗"].text) if _elem_resist_inputs["法抗"].text.is_valid_int() else 0
-	_data.phys_resist     = int(_elem_resist_inputs["物抗"].text) if _elem_resist_inputs["物抗"].text.is_valid_int() else 0
-	_data.res_fire        = int(_elem_resist_inputs["火"].text)   if _elem_resist_inputs["火"].text.is_valid_int()   else 0
-	_data.res_ice         = int(_elem_resist_inputs["冰"].text)   if _elem_resist_inputs["冰"].text.is_valid_int()   else 0
-	_data.res_lightning   = int(_elem_resist_inputs["電"].text)   if _elem_resist_inputs["電"].text.is_valid_int()   else 0
-	_data.res_acid        = int(_elem_resist_inputs["酸"].text)   if _elem_resist_inputs["酸"].text.is_valid_int()   else 0
-	_data.res_sound       = int(_elem_resist_inputs["音"].text)   if _elem_resist_inputs["音"].text.is_valid_int()   else 0
-	_data.res_psychic     = int(_elem_resist_inputs["心"].text)   if _elem_resist_inputs["心"].text.is_valid_int()   else 0
-	_data.res_light       = int(_elem_resist_inputs["光"].text)   if _elem_resist_inputs["光"].text.is_valid_int()   else 0
-	_data.res_dark        = int(_elem_resist_inputs["暗"].text)   if _elem_resist_inputs["暗"].text.is_valid_int()   else 0
+	_data.magic_resist = int(_elem_resist_inputs["法抗"].text) if _elem_resist_inputs["法抗"].text.is_valid_int() else 0
+	_data.phys_resist = int(_elem_resist_inputs["物抗"].text) if _elem_resist_inputs["物抗"].text.is_valid_int() else 0
+	_data.res_fire = int(_elem_resist_inputs["火"].text) if _elem_resist_inputs["火"].text.is_valid_int() else 0
+	_data.res_ice = int(_elem_resist_inputs["冰"].text) if _elem_resist_inputs["冰"].text.is_valid_int() else 0
+	_data.res_lightning = int(_elem_resist_inputs["電"].text) if _elem_resist_inputs["電"].text.is_valid_int() else 0
+	_data.res_acid = int(_elem_resist_inputs["酸"].text) if _elem_resist_inputs["酸"].text.is_valid_int() else 0
+	_data.res_sound = int(_elem_resist_inputs["音"].text) if _elem_resist_inputs["音"].text.is_valid_int() else 0
+	_data.res_psychic = int(_elem_resist_inputs["心"].text) if _elem_resist_inputs["心"].text.is_valid_int() else 0
+	_data.res_light = int(_elem_resist_inputs["光"].text) if _elem_resist_inputs["光"].text.is_valid_int() else 0
+	_data.res_dark = int(_elem_resist_inputs["暗"].text) if _elem_resist_inputs["暗"].text.is_valid_int() else 0
 	# 裝備槽 / 道具庫：互動時已即時寫入 _data，無需額外回寫
 
 
