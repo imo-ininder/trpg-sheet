@@ -96,11 +96,12 @@ static func _resolve(data: CharacterData, mods: Array) -> Dictionary:
 
 	var result: Dictionary = {}
 
-	# ── Step 1：屬性 total（base + temp + equip + modifier）
+	# ── Step 1：屬性 total（base + temp + equip → modifier → multiply/override）
 	for attr in CharacterData.ATTR_NAMES:
 		var raw_base: int = data.attr_base.get(attr, 13)
-		var modifier: int = int(ceil((raw_base - 13) / 2.0))
-		var total: int    = int(adds.get(attr, float(raw_base))) + modifier
+		var attr_sum: int = int(adds.get(attr, float(raw_base)))  # base + temp + equip
+		var modifier: int = int(ceil((attr_sum - 13) / 2.0))
+		var total: int    = attr_sum + modifier
 		# 套用 multiply / override
 		if overrides.has(attr):
 			total = int(overrides[attr])
