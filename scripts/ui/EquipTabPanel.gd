@@ -269,21 +269,27 @@ func _add_mod_row(existing_mod) -> void:
 	_rebuild_all_mod_row_opts()
 
 	if existing_mod != null:
-		var target_name: String = existing_mod.get("type", "")
-		var target_value: int   = existing_mod.get("value", 0)
-		# 選 affix
-		for i in affix_opt.item_count:
-			if affix_opt.get_item_text(i) == target_name:
-				affix_opt.selected = i
-				break
-		# 重建 tier（_rebuild_all_mod_row_opts 已建，但 selection 剛改，需再 rebuild 此列 tier）
-		var affix_def := _affix_from_entry(row_entry)
-		tier_opt.clear()
-		if affix_def != null:
-			for t in affix_def.tiers:
-				tier_opt.add_item("+%d" % t.get("cost", 0))
-			for j in affix_def.tiers.size():
-				if affix_def.tiers[j].get("value", 0) == target_value:
+		# 新格式：{affix_id, cost}
+		var target_id: String = existing_mod.get("affix_id", "")
+		var target_cost: int  = existing_mod.get("cost", 0)
+
+		# 找到對應的 affix
+		var target_affix := AffixLibrary.get_affix(target_id)
+		if target_affix != null:
+			# 選 affix（使用 affix_name）
+			for i in affix_opt.item_count:
+				if affix_opt.get_item_text(i) == target_affix.affix_name:
+					affix_opt.selected = i
+					break
+
+			# 重建 tier
+			tier_opt.clear()
+			var costs := target_affix.get_all_costs()
+			for cost in costs:
+				tier_opt.add_item("+%d" % cost)
+			# 選中對應的 cost
+			for j in costs.size():
+				if costs[j] == target_cost:
 					tier_opt.selected = j
 					break
 
@@ -319,9 +325,9 @@ func _rebuild_all_mod_row_opts() -> void:
 		var my_name: String = sel_names[i]
 
 		# 排除其他列已選的名稱
-		var filtered: Array = pool.filter(func(a: AffixData) -> bool:
+		var filtered: Array = pool.filter(func(a: AffixDef) -> bool:
 			for j in sel_names.size():
-				if j != i and sel_names[j] == a.name:
+				if j != i and sel_names[j] == a.affix_name:
 					return false
 			return true
 		)
@@ -330,8 +336,8 @@ func _rebuild_all_mod_row_opts() -> void:
 		affix_opt.clear()
 		var new_sel := 0
 		for k in filtered.size():
-			affix_opt.add_item(filtered[k].name)
-			if filtered[k].name == my_name:
+			affix_opt.add_item(filtered[k].affix_name)
+			if filtered[k].affix_name == my_name:
 				new_sel = k
 		affix_opt.selected = new_sel if filtered.size() > 0 else -1
 
@@ -340,16 +346,23 @@ func _rebuild_all_mod_row_opts() -> void:
 		tier_opt.clear()
 		var affix := _affix_from_entry(entry)
 		if affix != null:
-			for t in affix.tiers:
-				tier_opt.add_item("+%d" % t.get("cost", 0))
+			var costs := affix.get_all_costs()
+			for cost in costs:
+				tier_opt.add_item("+%d" % cost)
 			if prev_tier >= 0 and prev_tier < tier_opt.item_count:
 				tier_opt.selected = prev_tier
 
 ## 以名稱 lookup 取得 affix（不依賴 index 對齊）
-func _affix_from_entry(entry: Dictionary) -> AffixData:
+func _affix_from_entry(entry: Dictionary) -> AffixDef:
 	var opt: OptionButton = entry["affix_opt"]
 	if opt.selected < 0 or opt.selected >= opt.item_count: return null
-	return AffixLibrary.get_affix(opt.get_item_text(opt.selected))
+	# 需要從 affix_name 轉為 id
+	var affix_name := opt.get_item_text(opt.selected)
+	# 遍歷找到匹配的 affix
+	for affix: AffixDef in AffixLibrary.all_affixes():
+		if affix.affix_name == affix_name:
+			return affix
+	return null
 
 ## 從當前編輯器狀態更新道具檢視
 func _update_viewer() -> void:
@@ -368,11 +381,11 @@ func _update_viewer() -> void:
 			var affix := _affix_from_entry(entry)
 			if affix == null: continue
 			var tier_idx := tier_opt.selected
-			if tier_idx < 0 or tier_idx >= affix.tiers.size(): continue
-			var tier_data: Dictionary = affix.tiers[tier_idx]
-			var cost: int = tier_data.get("cost", 0)
-			var effect: String = tier_data.get("effect", "")
-			lines.append("[b]+%d %s[/b]\n%s" % [cost, affix.name, effect])
+			var costs := affix.get_all_costs()
+			if tier_idx < 0 or tier_idx >= costs.size(): continue
+			var cost: int = costs[tier_idx]
+			var description: String = affix.get_description(cost)
+			lines.append("[b]+%d %s[/b]\n%s" % [cost, affix.affix_name, description])
 	_item_viewer_label.text = "\n".join(lines)
 
 ## 從已儲存的 item dict 更新道具檢視（inventory 選取時使用）
@@ -388,16 +401,15 @@ func _show_item_in_viewer(item: Dictionary) -> void:
 	if not mods.is_empty():
 		lines.append("")
 		for mod in mods:
-			var affix := AffixLibrary.get_affix(mod.get("type", ""))
+			# 新格式：{affix_id, cost}
+			var affix_id: String = mod.get("affix_id", "")
+			var cost: int = mod.get("cost", 0)
+			var affix := AffixLibrary.get_affix(affix_id)
 			if affix == null:
-				lines.append(mod.get("type", "（未知）"))
+				lines.append(affix_id + "（未知）")
 				continue
-			var val: int = mod.get("value", 0)
-			var tier_idx := affix.tier_index_for_value(val)
-			var tier_data: Dictionary = affix.tiers[tier_idx] if tier_idx < affix.tiers.size() else {}
-			var cost: int = tier_data.get("cost", 0)
-			var effect: String = tier_data.get("effect", "")
-			lines.append("[b]+%d %s[/b]\n%s" % [cost, affix.name, effect])
+			var description: String = affix.get_description(cost)
+			lines.append("[b]+%d %s[/b]\n%s" % [cost, affix.affix_name, description])
 	_item_viewer_label.text = "\n".join(lines)
 
 func _current_slot_key() -> String:
@@ -497,10 +509,11 @@ func _save_item() -> void:
 		var affix := _affix_from_entry(entry)
 		if affix == null: continue
 		var tier_idx := tier_opt.selected
-		var tier_data: Dictionary = affix.tiers[tier_idx] if tier_idx < affix.tiers.size() else {}
-		var val: int = tier_data.get("value", 0)
-		total_cost += tier_data.get("cost", 0)
-		mods.append({ "type": affix.name, "value": val })
+		var costs := affix.get_all_costs()
+		if tier_idx >= 0 and tier_idx < costs.size():
+			var cost: int = costs[tier_idx]
+			total_cost += cost
+			mods.append({"affix_id": affix.id, "cost": cost})
 
 	# 名稱為空時自動產生：+{total cost} {slot label}
 	var iname := _item_name_edit.text.strip_edges()

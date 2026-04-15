@@ -73,7 +73,7 @@ static func _collect_equipment(data: CharacterData, mods: Array) -> void:
 	for sk in bonuses:
 		# 判定抗性：resist_抗毒素 → _resist_equip_抗毒素
 		if sk.begins_with("resist_"):
-			var resist_name := sk.trim_prefix("resist_")
+			var resist_name: String = sk.trim_prefix("resist_")
 			_add(mods, "_resist_equip_" + resist_name, bonuses[sk], "equip")
 		else:
 			_add(mods, sk, bonuses[sk], "equip")

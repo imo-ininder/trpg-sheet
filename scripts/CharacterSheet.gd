@@ -60,6 +60,7 @@ func _build_ui() -> void:
 var _page_char: VBoxContainer
 var _page_equip: VBoxContainer
 var _equip_tab_panel: EquipTabPanel
+var _special_abilities_label: RichTextLabel
 
 func _build_pages(parent: VBoxContainer) -> void:
 	_page_char = VBoxContainer.new()
@@ -79,8 +80,11 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_build_skill_row(_page_char)
 
 	_equip_tab_panel = EquipTabPanel.new()
+	_equip_tab_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_page_equip.add_child(_equip_tab_panel)
 	_equip_tab_panel.equip_changed.connect(_recompute)
+
+	_build_special_abilities_section(_page_equip)
 
 func switch_tab(tab: String) -> void:
 	_page_char.visible  = (tab == "腳色")
