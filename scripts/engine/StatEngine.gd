@@ -71,10 +71,10 @@ static func _collect_base(data: CharacterData, mods: Array) -> void:
 static func _collect_equipment(data: CharacterData, mods: Array) -> void:
 	var bonuses: Dictionary = AffixLibrary.calc_bonuses(data.item_library, data.equipment)
 	for sk in bonuses:
-		# all_resist 特殊處理：擴展到所有判定抗性
-		if sk == "all_resist":
-			for name in CharacterData.RESIST_NAMES:
-				_add(mods, "_resist_equip_" + name, bonuses[sk], "equip_all_resist")
+		# 判定抗性：resist_抗毒素 → _resist_equip_抗毒素
+		if sk.begins_with("resist_"):
+			var resist_name := sk.trim_prefix("resist_")
+			_add(mods, "_resist_equip_" + resist_name, bonuses[sk], "equip")
 		else:
 			_add(mods, sk, bonuses[sk], "equip")
 

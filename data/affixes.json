@@ -1,0 +1,3787 @@
+[
+  {
+    "id": "光亮",
+    "affix_name": "光亮",
+    "slots": [
+      "headband",
+      "necklace",
+      "bracelet",
+      "cloak",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "光亮"
+        },
+        "description": "經啟動後，可以照亮半徑20英尺的範圍。"
+      }
+    ]
+  },
+  {
+    "id": "迴力",
+    "affix_name": "迴力",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "迴力"
+        },
+        "description": "擲出此武器後，迴力武器會在持用者作自動飛回持用者手中。若使用者無法接住或是擲出後移動位置，則武器會落在原本被擲出的位置。"
+      }
+    ]
+  },
+  {
+    "id": "及遠",
+    "affix_name": "及遠",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "及遠"
+        },
+        "description": "使遠程的武器其射程加倍。"
+      }
+    ]
+  },
+  {
+    "id": "狂斬",
+    "affix_name": "狂斬",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "狂斬"
+        },
+        "description": "武器持用者若持有順勢斬專長，每輪可以再使用此專長一次。"
+      }
+    ]
+  },
+  {
+    "id": "投擲",
+    "affix_name": "投擲",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "投擲"
+        },
+        "description": "此能力僅可以附加在近戰武器上，可以將此武器做為投擲攻擊。"
+      }
+    ]
+  },
+  {
+    "id": "活化",
+    "affix_name": "活化",
+    "slots": [
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "活化"
+        },
+        "description": "一旦接受到指令，活化盾會自動漂浮在持有者2英尺附近。持用者兩手可以自由行動。"
+      }
+    ]
+  },
+  {
+    "id": "無相",
+    "affix_name": "無相",
+    "slots": [
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "無相"
+        },
+        "description": "一旦接受到啟動指令，此套鎧甲會變成一般衣服的樣子。"
+      }
+    ]
+  },
+  {
+    "id": "爆擊球",
+    "affix_name": "爆擊球",
+    "slots": [
+      "weapon",
+      "gloves",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "爆擊球"
+        },
+        "description": "全身上限為三顆，拿球方式可能有擊中敵人、被敵人擊中、近戰攻擊時觸發等等，當吻合拿球條件時可進行拿球檢定，如果成功則取得該充能球。（每個詞綴須獨立進行檢定）每一顆增加5%爆擊範圍、穿透1點物抗（不可以作用於法術）。充能球持續時間為自身爆擊球上限輪數。非擁有特殊專長：當你擊中敵人時進行拿球檢定。拿球檢定"
+      }
+    ]
+  },
+  {
+    "id": "狂怒球",
+    "affix_name": "狂怒球",
+    "slots": [
+      "weapon",
+      "gloves",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "狂怒球"
+        },
+        "description": "全身上限為三顆，拿球方式可能有擊中敵人、被敵人擊中、近戰攻擊時觸發等等，當吻合拿球條件時可進行拿球檢定，如果成功則取得該充能球。（每個詞綴須獨立進行檢定）每一顆增加2點物理攻擊傷害骰加值、一點DEX。充能球持續時間為自身狂怒球上限輪數。非擁有特殊專長：當你擊中敵人時進行拿球檢定。拿球檢定：附有該詞綴"
+      }
+    ]
+  },
+  {
+    "id": "耐力球",
+    "affix_name": "耐力球",
+    "slots": [
+      "weapon",
+      "gloves",
+      "belt",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "耐力球"
+        },
+        "description": "全身上限為三顆，拿球方式可能有擊中敵人、被敵人擊中、近戰攻擊時觸發等等，當吻合拿球條件時可進行拿球檢定，如果成功則取得該充能球。（每個詞綴須獨立進行檢定）每一顆增加全抗＋5檢定加值、法抗＋5、物抗＋5。充能球持續時間為自身耐力球上限輪數。非擁有特殊專長：當你被敵人擊中時進行拿球檢定。拿球檢定：附有該"
+      }
+    ]
+  },
+  {
+    "id": "隱形",
+    "affix_name": "隱形",
+    "slots": [
+      "bracelet",
+      "ring"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "隱形"
+        },
+        "description": "一日共可以使用40分鐘之隱形術，可以中途解消。"
+      }
+    ]
+  },
+  {
+    "id": "追擊",
+    "affix_name": "追擊",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "追擊"
+        },
+        "description": "持用者進行全力攻擊後，可以進行與機會攻擊雷同的追加攻擊。"
+      }
+    ]
+  },
+  {
+    "id": "追蹤",
+    "affix_name": "追蹤",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "追蹤"
+        },
+        "description": "射出能自動瞄準目標，忽略可能造成失手機率的因素，例如隱蔽。（使用者仍需要瞄準目標所處位置，射向空地的箭矢不會自動轉向附近其他目標）"
+      }
+    ]
+  },
+  {
+    "id": "適行",
+    "affix_name": "適行",
+    "slots": [
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "適行"
+        },
+        "description": "穿穿戴者在進行自然變身時仍保有此盔甲的加值或增強值。"
+      }
+    ]
+  },
+  {
+    "id": "光能",
+    "affix_name": "光能",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "光能"
+        },
+        "description": "可以照亮半徑20英尺範圍，可以穿透無機物質及防具。"
+      }
+    ]
+  },
+  {
+    "id": "靈化",
+    "affix_name": "靈化",
+    "slots": [
+      "armor",
+      "necklace",
+      "bracelet"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "靈化"
+        },
+        "description": "一日僅能使用此能力一次，穿戴者變化成靈體，且變成靈體的持續時間沒有限制。"
+      }
+    ]
+  },
+  {
+    "id": "牽亡",
+    "affix_name": "牽亡",
+    "slots": [
+      "armor",
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "牽亡"
+        },
+        "description": "穿戴者每天可以操控至多26HD的死靈如同死靈操控術。每日破曉時分，原本被影響的死靈就不再受控制。"
+      }
+    ]
+  },
+  {
+    "id": "舞空",
+    "affix_name": "舞空",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "舞空"
+        },
+        "description": "舞空武器可以自行飄浮（消耗一個標準動作），其攻擊檢定與對方的閃避作對抗，舞空的武器無法進行機會攻擊 。舞空的武器能隨者持用者移動，在其舞空的時間內，持用者能以即時動作取回手中。"
+      }
+    ]
+  },
+  {
+    "id": "鏡映",
+    "affix_name": "鏡映",
+    "slots": [
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "鏡映"
+        },
+        "description": "一但接受道指令，可以將法術反彈回去攻擊施法者（僅能將射線型法術逆轉），其一日逆轉次數與逆轉法術之環數為有該祠墜魔法物品之總加值÷2。經過長休息後可以將逆轉次數重新充能至滿。"
+      }
+    ]
+  },
+  {
+    "id": "斬首",
+    "affix_name": "斬首",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "斬首"
+        },
+        "description": "若攻擊骰擲出爆擊且命中敵人時，可以直接將敵人身首分離。"
+      }
+    ]
+  },
+  {
+    "id": "天命",
+    "affix_name": "天命",
+    "slots": [
+      "ring",
+      "necklace",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 10,
+        "modifier": {
+          "type": "special",
+          "key": "天命"
+        },
+        "description": "一日可以將裝備加值判定骰、寶藏骰、劇情骰外的檢定進行重擲，重擲的次數為三次。"
+      }
+    ]
+  },
+  {
+    "id": "暗影",
+    "affix_name": "暗影",
+    "slots": [
+      "armor",
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "暗影"
+        },
+        "description": "穿戴者進行躲藏時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "暗影"
+        },
+        "description": "穿戴者進行躲藏時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "暗影"
+        },
+        "description": "穿戴者進行躲藏時檢定有加值（＋5、＋10、＋15）"
+      }
+    ]
+  },
+  {
+    "id": "滑溜",
+    "affix_name": "滑溜",
+    "slots": [
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "滑溜"
+        },
+        "description": "穿戴者進行脫逃時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "滑溜"
+        },
+        "description": "穿戴者進行脫逃時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "滑溜"
+        },
+        "description": "穿戴者進行脫逃時檢定有加值（＋5、＋10、＋15）"
+      }
+    ]
+  },
+  {
+    "id": "躡行",
+    "affix_name": "躡行",
+    "slots": [
+      "armor",
+      "cloak",
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "躡行"
+        },
+        "description": "穿戴者進行潛行時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "躡行"
+        },
+        "description": "穿戴者進行潛行時檢定有加值（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "躡行"
+        },
+        "description": "穿戴者進行潛行時檢定有加值（＋5、＋10、＋15）"
+      }
+    ]
+  },
+  {
+    "id": "避矢",
+    "affix_name": "避矢",
+    "slots": [
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "避矢"
+        },
+        "description": "當持有者受到遠程武器擊中時，可以進行抗噴檢定（每增加一個加值層級則此判定時＋10），若通過檢定則箭矢將由盾牌格檔開。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "避矢"
+        },
+        "description": "當持有者受到遠程武器擊中時，可以進行抗噴檢定（每增加一個加值層級則此判定時＋10），若通過檢定則箭矢將由盾牌格檔開。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "避矢"
+        },
+        "description": "當持有者受到遠程武器擊中時，可以進行抗噴檢定（每增加一個加值層級則此判定時＋10），若通過檢定則箭矢將由盾牌格檔開。"
+      }
+    ]
+  },
+  {
+    "id": "儲魔",
+    "affix_name": "儲魔",
+    "slots": [
+      "headband",
+      "ring",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "儲魔"
+        },
+        "description": "可以花費SP儲存SP在此魔法物品內。（可以儲存15、30、45點SP。）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "儲魔"
+        },
+        "description": "可以花費SP儲存SP在此魔法物品內。（可以儲存15、30、45點SP。）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "儲魔"
+        },
+        "description": "可以花費SP儲存SP在此魔法物品內。（可以儲存15、30、45點SP。）"
+      }
+    ]
+  },
+  {
+    "id": "電擊",
+    "affix_name": "電擊",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "電擊"
+        },
+        "description": "被擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "電擊"
+        },
+        "description": "被擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "電擊"
+        },
+        "description": "被擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      }
+    ]
+  },
+  {
+    "id": "凍寒",
+    "affix_name": "凍寒",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "凍寒"
+        },
+        "description": "被擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "凍寒"
+        },
+        "description": "被擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "凍寒"
+        },
+        "description": "被擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      }
+    ]
+  },
+  {
+    "id": "炙燄",
+    "affix_name": "炙燄",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "炙燄"
+        },
+        "description": "被擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "炙燄"
+        },
+        "description": "被擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "炙燄"
+        },
+        "description": "被擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該穿透效果維持此詞綴所需兌換之加值輪數。"
+      }
+    ]
+  },
+  {
+    "id": "囤法",
+    "affix_name": "囤法",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "囤法"
+        },
+        "description": "施法者可以在此武器中一個針對單一目標的法術。（每增加一個加值層級則可以儲存的法術加1環、儲存的量加1）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "囤法"
+        },
+        "description": "施法者可以在此武器中一個針對單一目標的法術。（每增加一個加值層級則可以儲存的法術加1環、儲存的量加1）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "囤法"
+        },
+        "description": "施法者可以在此武器中一個針對單一目標的法術。（每增加一個加值層級則可以儲存的法術加1環、儲存的量加1）"
+      }
+    ]
+  },
+  {
+    "id": "破敵",
+    "affix_name": "破敵",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "破敵"
+        },
+        "description": "專門對付特地某類生物。在攻擊該類生物時,會多＋1傷害加值，並額外造成2d6額外傷害。每增加一個加值層級則傷害骰多2d6與＋1傷害加值。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "破敵"
+        },
+        "description": "專門對付特地某類生物。在攻擊該類生物時,會多＋1傷害加值，並額外造成2d6額外傷害。每增加一個加值層級則傷害骰多2d6與＋1傷害加值。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "破敵"
+        },
+        "description": "專門對付特地某類生物。在攻擊該類生物時,會多＋1傷害加值，並額外造成2d6額外傷害。每增加一個加值層級則傷害骰多2d6與＋1傷害加值。"
+      }
+    ]
+  },
+  {
+    "id": "慈悲",
+    "affix_name": "慈悲",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "慈悲"
+        },
+        "description": "被擊中的目標額外造成1d6傷害，此傷害不會造成致死。（每增加一個加值層級則傷害骰多1d6）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "慈悲"
+        },
+        "description": "被擊中的目標額外造成1d6傷害，此傷害不會造成致死。（每增加一個加值層級則傷害骰多1d6）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "慈悲"
+        },
+        "description": "被擊中的目標額外造成1d6傷害，此傷害不會造成致死。（每增加一個加值層級則傷害骰多1d6）"
+      }
+    ]
+  },
+  {
+    "id": "捨命",
+    "affix_name": "捨命",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "捨命"
+        },
+        "description": "被擊中的目標會造成額外2d6傷害，對自己造成1d6內傷，內傷不可進行傷害減免。（每增加一個加值層級則傷害骰多2d6但內傷增加1d6傷害。）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "捨命"
+        },
+        "description": "被擊中的目標會造成額外2d6傷害，對自己造成1d6內傷，內傷不可進行傷害減免。（每增加一個加值層級則傷害骰多2d6但內傷增加1d6傷害。）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "捨命"
+        },
+        "description": "被擊中的目標會造成額外2d6傷害，對自己造成1d6內傷，內傷不可進行傷害減免。（每增加一個加值層級則傷害骰多2d6但內傷增加1d6傷害。）"
+      }
+    ]
+  },
+  {
+    "id": "護命",
+    "affix_name": "護命",
+    "slots": [
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "護命"
+        },
+        "description": "穿戴者受到偷襲或致命一擊時有機率（25%、75%、100%）可以抵銷其傷害，只受到正常傷害。同時增加死亡血量以及昏迷血量的上限（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "護命"
+        },
+        "description": "穿戴者受到偷襲或致命一擊時有機率（25%、75%、100%）可以抵銷其傷害，只受到正常傷害。同時增加死亡血量以及昏迷血量的上限（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "護命"
+        },
+        "description": "穿戴者受到偷襲或致命一擊時有機率（25%、75%、100%）可以抵銷其傷害，只受到正常傷害。同時增加死亡血量以及昏迷血量的上限（＋5、＋10、＋15）"
+      }
+    ]
+  },
+  {
+    "id": "護身",
+    "affix_name": "護身",
+    "slots": [
+      "weapon",
+      "boots",
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "護身"
+        },
+        "description": "閃避＋5、抗噴＋5。每增加一個加值層級則閃避＋5、抗噴＋5。（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "護身"
+        },
+        "description": "閃避＋5、抗噴＋5。每增加一個加值層級則閃避＋5、抗噴＋5。（＋5、＋10、＋15）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "護身"
+        },
+        "description": "閃避＋5、抗噴＋5。每增加一個加值層級則閃避＋5、抗噴＋5。（＋5、＋10、＋15）"
+      }
+    ]
+  },
+  {
+    "id": "猛擊",
+    "affix_name": "猛擊",
+    "slots": [
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "猛擊"
+        },
+        "description": "進行盾牌猛擊時追加傷害（中型輕盾1d6、中型重盾1d8）。每增加一個加值層級則傷害骰多1d6或1d8根據使用的盾牌而有所區別。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "猛擊"
+        },
+        "description": "進行盾牌猛擊時追加傷害（中型輕盾1d6、中型重盾1d8）。每增加一個加值層級則傷害骰多1d6或1d8根據使用的盾牌而有所區別。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "猛擊"
+        },
+        "description": "進行盾牌猛擊時追加傷害（中型輕盾1d6、中型重盾1d8）。每增加一個加值層級則傷害骰多1d6或1d8根據使用的盾牌而有所區別。"
+      }
+    ]
+  },
+  {
+    "id": "目盲",
+    "affix_name": "目盲",
+    "slots": [
+      "shield",
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "目盲"
+        },
+        "description": "每日可使用兩次，鎧甲、盾牌會發出強烈的閃光。除持有者外，所有離持有者20英尺內的生物需做抗噴吐檢定（有－10減值），若沒有通過則目盲1d4輪。每增加一個加值層級則可以使用的次數增加兩次，同時抗吐檢定有多－10減值"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "目盲"
+        },
+        "description": "每日可使用兩次，鎧甲、盾牌會發出強烈的閃光。除持有者外，所有離持有者20英尺內的生物需做抗噴吐檢定（有－10減值），若沒有通過則目盲1d4輪。每增加一個加值層級則可以使用的次數增加兩次，同時抗吐檢定有多－10減值"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "目盲"
+        },
+        "description": "每日可使用兩次，鎧甲、盾牌會發出強烈的閃光。除持有者外，所有離持有者20英尺內的生物需做抗噴吐檢定（有－10減值），若沒有通過則目盲1d4輪。每增加一個加值層級則可以使用的次數增加兩次，同時抗吐檢定有多－10減值"
+      }
+    ]
+  },
+  {
+    "id": "血量增福",
+    "affix_name": "血量增福",
+    "slots": [
+      "belt",
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "hp_bonus",
+          "type": "add",
+          "value": 6
+        },
+        "description": "HP +6"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "hp_bonus",
+          "type": "add",
+          "value": 12
+        },
+        "description": "HP +12"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "hp_bonus",
+          "type": "add",
+          "value": 18
+        },
+        "description": "HP +18"
+      }
+    ]
+  },
+  {
+    "id": "魔力增福",
+    "affix_name": "魔力增福",
+    "slots": [
+      "headband",
+      "necklace"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "mp_bonus",
+          "type": "add",
+          "value": 6
+        },
+        "description": "MP +6"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "mp_bonus",
+          "type": "add",
+          "value": 12
+        },
+        "description": "MP +12"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "mp_bonus",
+          "type": "add",
+          "value": 18
+        },
+        "description": "MP +18"
+      }
+    ]
+  },
+  {
+    "id": "移動力",
+    "affix_name": "移動力",
+    "slots": [
+      "boots",
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "combat_move",
+          "type": "add",
+          "value": 1
+        },
+        "description": "COMBAT_MOVE +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "combat_move",
+          "type": "add",
+          "value": 2
+        },
+        "description": "COMBAT_MOVE +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "combat_move",
+          "type": "add",
+          "value": 3
+        },
+        "description": "COMBAT_MOVE +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "combat_move",
+          "type": "add",
+          "value": 4
+        },
+        "description": "COMBAT_MOVE +4"
+      }
+    ]
+  },
+  {
+    "id": "抗性增加",
+    "affix_name": "抗性增加",
+    "slots": [
+      "cloak",
+      "ring",
+      "belt"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": [
+          {
+            "stat": "resist_抗毒素",
+            "type": "add",
+            "value": 5
+          },
+          {
+            "stat": "resist_抗控制",
+            "type": "add",
+            "value": 5
+          },
+          {
+            "stat": "resist_抗轉化",
+            "type": "add",
+            "value": 5
+          },
+          {
+            "stat": "resist_抗噴吐",
+            "type": "add",
+            "value": 5
+          },
+          {
+            "stat": "resist_抗魔法",
+            "type": "add",
+            "value": 5
+          }
+        ],
+        "description": "所有判定抗性 +5"
+      },
+      {
+        "cost": 2,
+        "modifier": [
+          {
+            "stat": "resist_抗毒素",
+            "type": "add",
+            "value": 10
+          },
+          {
+            "stat": "resist_抗控制",
+            "type": "add",
+            "value": 10
+          },
+          {
+            "stat": "resist_抗轉化",
+            "type": "add",
+            "value": 10
+          },
+          {
+            "stat": "resist_抗噴吐",
+            "type": "add",
+            "value": 10
+          },
+          {
+            "stat": "resist_抗魔法",
+            "type": "add",
+            "value": 10
+          }
+        ],
+        "description": "所有判定抗性 +10"
+      },
+      {
+        "cost": 3,
+        "modifier": [
+          {
+            "stat": "resist_抗毒素",
+            "type": "add",
+            "value": 15
+          },
+          {
+            "stat": "resist_抗控制",
+            "type": "add",
+            "value": 15
+          },
+          {
+            "stat": "resist_抗轉化",
+            "type": "add",
+            "value": 15
+          },
+          {
+            "stat": "resist_抗噴吐",
+            "type": "add",
+            "value": 15
+          },
+          {
+            "stat": "resist_抗魔法",
+            "type": "add",
+            "value": 15
+          }
+        ],
+        "description": "所有判定抗性 +15"
+      },
+      {
+        "cost": 4,
+        "modifier": [
+          {
+            "stat": "resist_抗毒素",
+            "type": "add",
+            "value": 20
+          },
+          {
+            "stat": "resist_抗控制",
+            "type": "add",
+            "value": 20
+          },
+          {
+            "stat": "resist_抗轉化",
+            "type": "add",
+            "value": 20
+          },
+          {
+            "stat": "resist_抗噴吐",
+            "type": "add",
+            "value": 20
+          },
+          {
+            "stat": "resist_抗魔法",
+            "type": "add",
+            "value": 20
+          }
+        ],
+        "description": "所有判定抗性 +20"
+      },
+      {
+        "cost": 5,
+        "modifier": [
+          {
+            "stat": "resist_抗毒素",
+            "type": "add",
+            "value": 25
+          },
+          {
+            "stat": "resist_抗控制",
+            "type": "add",
+            "value": 25
+          },
+          {
+            "stat": "resist_抗轉化",
+            "type": "add",
+            "value": 25
+          },
+          {
+            "stat": "resist_抗噴吐",
+            "type": "add",
+            "value": 25
+          },
+          {
+            "stat": "resist_抗魔法",
+            "type": "add",
+            "value": 25
+          }
+        ],
+        "description": "所有判定抗性 +25"
+      }
+    ]
+  },
+  {
+    "id": "cha_增加",
+    "affix_name": "CHA 增加",
+    "slots": [
+      "headband",
+      "necklace",
+      "ring"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 1
+        },
+        "description": "CHA +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 2
+        },
+        "description": "CHA +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 3
+        },
+        "description": "CHA +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 4
+        },
+        "description": "CHA +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 5
+        },
+        "description": "CHA +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "CHA",
+          "type": "add",
+          "value": 6
+        },
+        "description": "CHA +6"
+      }
+    ]
+  },
+  {
+    "id": "con_增加",
+    "affix_name": "CON 增加",
+    "slots": [
+      "gloves",
+      "armor",
+      "belt"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 1
+        },
+        "description": "CON +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 2
+        },
+        "description": "CON +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 3
+        },
+        "description": "CON +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 4
+        },
+        "description": "CON +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 5
+        },
+        "description": "CON +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "CON",
+          "type": "add",
+          "value": 6
+        },
+        "description": "CON +6"
+      }
+    ]
+  },
+  {
+    "id": "dex_增加",
+    "affix_name": "DEX 增加",
+    "slots": [
+      "ring",
+      "belt",
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 1
+        },
+        "description": "DEX +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 2
+        },
+        "description": "DEX +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 3
+        },
+        "description": "DEX +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 4
+        },
+        "description": "DEX +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 5
+        },
+        "description": "DEX +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "DEX",
+          "type": "add",
+          "value": 6
+        },
+        "description": "DEX +6"
+      }
+    ]
+  },
+  {
+    "id": "int_增加",
+    "affix_name": "INT 增加",
+    "slots": [
+      "headband",
+      "necklace",
+      "ring",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 1
+        },
+        "description": "INT +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 2
+        },
+        "description": "INT +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 3
+        },
+        "description": "INT +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 4
+        },
+        "description": "INT +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 5
+        },
+        "description": "INT +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "INT",
+          "type": "add",
+          "value": 6
+        },
+        "description": "INT +6"
+      }
+    ]
+  },
+  {
+    "id": "res_增加",
+    "affix_name": "RES 增加",
+    "slots": [
+      "ring",
+      "necklace",
+      "headband",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 1
+        },
+        "description": "RES +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 3
+        },
+        "description": "RES +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 5
+        },
+        "description": "RES +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES +6"
+      }
+    ]
+  },
+  {
+    "id": "ski_增加",
+    "affix_name": "SKI 增加",
+    "slots": [
+      "ring",
+      "gloves",
+      "bracelet"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 1
+        },
+        "description": "SKI +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 2
+        },
+        "description": "SKI +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 3
+        },
+        "description": "SKI +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 4
+        },
+        "description": "SKI +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 5
+        },
+        "description": "SKI +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "SKI",
+          "type": "add",
+          "value": 6
+        },
+        "description": "SKI +6"
+      }
+    ]
+  },
+  {
+    "id": "spi_增加",
+    "affix_name": "SPI 增加",
+    "slots": [
+      "headband",
+      "necklace",
+      "ring"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 1
+        },
+        "description": "SPI +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 2
+        },
+        "description": "SPI +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 3
+        },
+        "description": "SPI +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 4
+        },
+        "description": "SPI +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 5
+        },
+        "description": "SPI +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "SPI",
+          "type": "add",
+          "value": 6
+        },
+        "description": "SPI +6"
+      }
+    ]
+  },
+  {
+    "id": "str_增加",
+    "affix_name": "STR 增加",
+    "slots": [
+      "gloves",
+      "armor",
+      "belt",
+      "bracelet"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 1
+        },
+        "description": "STR +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 2
+        },
+        "description": "STR +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 3
+        },
+        "description": "STR +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 4
+        },
+        "description": "STR +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 5
+        },
+        "description": "STR +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "STR",
+          "type": "add",
+          "value": 6
+        },
+        "description": "STR +6"
+      }
+    ]
+  },
+  {
+    "id": "wis_增加",
+    "affix_name": "WIS 增加",
+    "slots": [
+      "headband",
+      "necklace",
+      "ring"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 1
+        },
+        "description": "WIS +1"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 2
+        },
+        "description": "WIS +2"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 3
+        },
+        "description": "WIS +3"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 4
+        },
+        "description": "WIS +4"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 5
+        },
+        "description": "WIS +5"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "WIS",
+          "type": "add",
+          "value": 6
+        },
+        "description": "WIS +6"
+      }
+    ]
+  },
+  {
+    "id": "鋒利",
+    "affix_name": "鋒利",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "鋒利"
+        },
+        "description": "增加5%爆擊範圍。每增加一個加值層級則多＋5%爆擊範圍。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "鋒利"
+        },
+        "description": "增加5%爆擊範圍。每增加一個加值層級則多＋5%爆擊範圍。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "鋒利"
+        },
+        "description": "增加5%爆擊範圍。每增加一個加值層級則多＋5%爆擊範圍。"
+      }
+    ]
+  },
+  {
+    "id": "冰爆",
+    "affix_name": "冰爆",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的寒冷傷害,若造成爆擊則改造成2d10的額外寒冷傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點冰抗。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的寒冷傷害,若造成爆擊則改造成2d10的額外寒冷傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點冰抗。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的寒冷傷害,若造成爆擊則改造成2d10的額外寒冷傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點冰抗。（每增加一個加值層級則多穿透5點冰抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點冰抗。"
+      }
+    ]
+  },
+  {
+    "id": "電爆",
+    "affix_name": "電爆",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "電爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點電抗。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "電爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點電抗。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "電爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點電抗。（每增加一個加值層級則多穿透5點電抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點電抗。"
+      }
+    ]
+  },
+  {
+    "id": "燄爆",
+    "affix_name": "燄爆",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "燄爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點火抗。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "燄爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點火抗。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "燄爆"
+        },
+        "description": "被擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）被擊中的目標穿透5點火抗。（每增加一個加值層級則多穿透5點火抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點火抗。"
+      }
+    ]
+  },
+  {
+    "id": "雷鳴",
+    "affix_name": "雷鳴",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "雷鳴"
+        },
+        "description": "被擊中的目標會造成額外1d8音波傷害，且需進行強韌－10的檢定，如果失敗則永久耳聾。（每增加一個加值層級則傷害骰多1d8且強韌檢定多－10減值。）並穿透5點物抗（每增加一個加值層級則多穿透5點物抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點物抗。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "雷鳴"
+        },
+        "description": "被擊中的目標會造成額外1d8音波傷害，且需進行強韌－10的檢定，如果失敗則永久耳聾。（每增加一個加值層級則傷害骰多1d8且強韌檢定多－10減值。）並穿透5點物抗（每增加一個加值層級則多穿透5點物抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點物抗。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "雷鳴"
+        },
+        "description": "被擊中的目標會造成額外1d8音波傷害，且需進行強韌－10的檢定，如果失敗則永久耳聾。（每增加一個加值層級則傷害骰多1d8且強韌檢定多－10減值。）並穿透5點物抗（每增加一個加值層級則多穿透5點物抗）該穿透效果維持此詞綴所需兌換之加值輪數。若爆擊時額外穿透10點物抗。"
+      }
+    ]
+  },
+  {
+    "id": "神聖",
+    "affix_name": "神聖",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "神聖"
+        },
+        "description": "對於邪惡陣營生物忽略其相應的傷害減免，攻擊邪惡陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗。（每增加一個加值層級則多穿透5點光抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "神聖"
+        },
+        "description": "對於邪惡陣營生物忽略其相應的傷害減免，攻擊邪惡陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗。（每增加一個加值層級則多穿透5點光抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "神聖"
+        },
+        "description": "對於邪惡陣營生物忽略其相應的傷害減免，攻擊邪惡陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗。（每增加一個加值層級則多穿透5點光抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      }
+    ]
+  },
+  {
+    "id": "守序",
+    "affix_name": "守序",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "守序"
+        },
+        "description": "對於混亂陣營生物忽略其相應的傷害減免，攻擊混亂陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗或暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "守序"
+        },
+        "description": "對於混亂陣營生物忽略其相應的傷害減免，攻擊混亂陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗或暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "守序"
+        },
+        "description": "對於混亂陣營生物忽略其相應的傷害減免，攻擊混亂陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點光抗或暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值"
+      }
+    ]
+  },
+  {
+    "id": "邪惡",
+    "affix_name": "邪惡",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "邪惡"
+        },
+        "description": "對於善良陣營生物忽略其相應的傷害減免，攻擊善良陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "邪惡"
+        },
+        "description": "對於善良陣營生物忽略其相應的傷害減免，攻擊善良陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "邪惡"
+        },
+        "description": "對於善良陣營生物忽略其相應的傷害減免，攻擊善良陣營生物時額外造成2d6傷害。（非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。）被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。該"
+      }
+    ]
+  },
+  {
+    "id": "混沌",
+    "affix_name": "混沌",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "混沌"
+        },
+        "description": "對於守序陣營生物忽略其相應的傷害減免，攻擊守序陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "混沌"
+        },
+        "description": "對於守序陣營生物忽略其相應的傷害減免，攻擊守序陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "混沌"
+        },
+        "description": "對於守序陣營生物忽略其相應的傷害減免，攻擊守序陣營生物時額外造成2d6傷害。非此陣營的生物持有將承受一個負向等級。每增加一個加值層級則傷害骰多2d6。被擊中的目標，需進行抗魔法檢定，若失敗則穿透5點暗抗。（每增加一個加值層級則多穿透5點光抗或暗抗）抗魔法檢定為抗魔法-附有此詞綴之魔法物品總加值×3。"
+      }
+    ]
+  },
+  {
+    "id": "瓦解",
+    "affix_name": "瓦解",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "瓦解"
+        },
+        "description": "遭受此武器擊中的不死生物須進行靈魂檢定（有－10減值），若失敗則會被毀滅。每增加一個加值層級則多－10減值。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "瓦解"
+        },
+        "description": "遭受此武器擊中的不死生物須進行靈魂檢定（有－10減值），若失敗則會被毀滅。每增加一個加值層級則多－10減值。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "瓦解"
+        },
+        "description": "遭受此武器擊中的不死生物須進行靈魂檢定（有－10減值），若失敗則會被毀滅。每增加一個加值層級則多－10減值。"
+      }
+    ]
+  },
+  {
+    "id": "引箭",
+    "affix_name": "引箭",
+    "slots": [
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "引箭"
+        },
+        "description": "能吸引遠程武器（需做抗噴檢定，每增加一個加值層級則此判定時＋10），讓射擊、拋擲類武器轉向。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "引箭"
+        },
+        "description": "能吸引遠程武器（需做抗噴檢定，每增加一個加值層級則此判定時＋10），讓射擊、拋擲類武器轉向。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "引箭"
+        },
+        "description": "能吸引遠程武器（需做抗噴檢定，每增加一個加值層級則此判定時＋10），讓射擊、拋擲類武器轉向。"
+      }
+    ]
+  },
+  {
+    "id": "堅韌",
+    "affix_name": "堅韌",
+    "slots": [
+      "armor"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 2
+          },
+          {
+            "stat": "magic_resist",
+            "type": "add",
+            "value": 2
+          }
+        ],
+        "description": "PHYS_RESIST +2、MAGIC_RESIST +2"
+      },
+      {
+        "cost": 4,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 4
+          },
+          {
+            "stat": "magic_resist",
+            "type": "add",
+            "value": 4
+          }
+        ],
+        "description": "PHYS_RESIST +4、MAGIC_RESIST +4"
+      },
+      {
+        "cost": 6,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 6
+          },
+          {
+            "stat": "magic_resist",
+            "type": "add",
+            "value": 6
+          }
+        ],
+        "description": "PHYS_RESIST +6、MAGIC_RESIST +6"
+      }
+    ]
+  },
+  {
+    "id": "抗冰增加",
+    "affix_name": "抗冰增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "res_ice",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES_ICE +2"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "res_ice",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES_ICE +4"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "res_ice",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES_ICE +6"
+      }
+    ]
+  },
+  {
+    "id": "抗電增加",
+    "affix_name": "抗電增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "res_lightning",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES_LIGHTNING +2"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "res_lightning",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES_LIGHTNING +4"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "res_lightning",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES_LIGHTNING +6"
+      }
+    ]
+  },
+  {
+    "id": "抗火增加",
+    "affix_name": "抗火增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "res_fire",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES_FIRE +2"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "res_fire",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES_FIRE +4"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "res_fire",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES_FIRE +6"
+      }
+    ]
+  },
+  {
+    "id": "抗酸增加",
+    "affix_name": "抗酸增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "res_acid",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES_ACID +2"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "res_acid",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES_ACID +4"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "res_acid",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES_ACID +6"
+      }
+    ]
+  },
+  {
+    "id": "抗音增加",
+    "affix_name": "抗音增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 2
+          },
+          {
+            "stat": "res_sound",
+            "type": "add",
+            "value": 2
+          }
+        ],
+        "description": "PHYS_RESIST +2、RES_SOUND +2"
+      },
+      {
+        "cost": 4,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 4
+          },
+          {
+            "stat": "res_sound",
+            "type": "add",
+            "value": 4
+          }
+        ],
+        "description": "PHYS_RESIST +4、RES_SOUND +4"
+      },
+      {
+        "cost": 6,
+        "modifier": [
+          {
+            "stat": "phys_resist",
+            "type": "add",
+            "value": 6
+          },
+          {
+            "stat": "res_sound",
+            "type": "add",
+            "value": 6
+          }
+        ],
+        "description": "PHYS_RESIST +6、RES_SOUND +6"
+      }
+    ]
+  },
+  {
+    "id": "法抗增加",
+    "affix_name": "法抗增加",
+    "slots": [
+      "ring",
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 2
+        },
+        "description": "RES +2"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 4
+        },
+        "description": "RES +4"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 6
+        },
+        "description": "RES +6"
+      },
+      {
+        "cost": 8,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 8
+        },
+        "description": "RES +8"
+      },
+      {
+        "cost": 10,
+        "modifier": {
+          "stat": "RES",
+          "type": "add",
+          "value": 10
+        },
+        "description": "RES +10"
+      }
+    ]
+  },
+  {
+    "id": "寒冰增幅",
+    "affix_name": "寒冰增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "寒冰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "寒冰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "寒冰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6寒冷傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      }
+    ]
+  },
+  {
+    "id": "電擊增幅",
+    "affix_name": "電擊增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "電擊增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "電擊增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "電擊增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6電擊傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      }
+    ]
+  },
+  {
+    "id": "火焰增幅",
+    "affix_name": "火焰增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "火焰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "火焰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "火焰增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d6火焰傷害。（每增加一個加值層級則傷害骰多1d6）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      }
+    ]
+  },
+  {
+    "id": "冰爆增幅",
+    "affix_name": "冰爆增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的冰冷傷害,若造成爆擊則改造成2d10的額冰冷焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的冰冷傷害,若造成爆擊則改造成2d10的額冰冷焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "冰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的冰冷傷害,若造成爆擊則改造成2d10的額冰冷焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點冰抗（每增加一個加值層級則多穿透5點冰抗）"
+      }
+    ]
+  },
+  {
+    "id": "電爆增幅",
+    "affix_name": "電爆增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "電爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "電爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "電爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的電擊傷害,若造成爆擊則改造成2d10的額外電擊傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點電抗（每增加一個加值層級則多穿透5點電抗）"
+      }
+    ]
+  },
+  {
+    "id": "焰爆增幅",
+    "affix_name": "焰爆增幅",
+    "slots": [
+      "necklace",
+      "headband",
+      "bracelet",
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "焰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "焰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "焰爆增幅"
+        },
+        "description": "被攻擊性法術擊中的目標會造成額外1d10的火焰傷害,若造成爆擊則改造成2d10的額外火焰傷害。（每增加一個加值層級則傷害骰多1d10，若爆擊則多2d10。）並穿透5點火抗（每增加一個加值層級則多穿透5點火抗）"
+      }
+    ]
+  },
+  {
+    "id": "幽冥",
+    "affix_name": "幽冥",
+    "slots": [
+      "armor",
+      "shield",
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "幽冥"
+        },
+        "description": "遇到虛體生物攻擊或是攻擊虛體生物時，仍保有鎧甲、盾牌、武器的效果。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "幽冥"
+        },
+        "description": "遇到虛體生物攻擊或是攻擊虛體生物時，仍保有鎧甲、盾牌、武器的效果。"
+      }
+    ]
+  },
+  {
+    "id": "超魔法",
+    "affix_name": "超魔法",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "超魔法"
+        },
+        "description": "可以將你的法術附加該詞綴的超魔專長，使用次數為該魔法武器總加值÷2。（法術增遠、法術延時詞綴加值3，法術默發加值5，法術強效加值7，法術極效、法術瞬唱加值10。）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "超魔法"
+        },
+        "description": "可以將你的法術附加該詞綴的超魔專長，使用次數為該魔法武器總加值÷2。（法術增遠、法術延時詞綴加值3，法術默發加值5，法術強效加值7，法術極效、法術瞬唱加值10。）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "超魔法"
+        },
+        "description": "可以將你的法術附加該詞綴的超魔專長，使用次數為該魔法武器總加值÷2。（法術增遠、法術延時詞綴加值3，法術默發加值5，法術強效加值7，法術極效、法術瞬唱加值10。）"
+      },
+      {
+        "cost": 10,
+        "modifier": {
+          "type": "special",
+          "key": "超魔法"
+        },
+        "description": "可以將你的法術附加該詞綴的超魔專長，使用次數為該魔法武器總加值÷2。（法術增遠、法術延時詞綴加值3，法術默發加值5，法術強效加值7，法術極效、法術瞬唱加值10。）"
+      }
+    ]
+  },
+  {
+    "id": "三願",
+    "affix_name": "三願",
+    "slots": [
+      "staff",
+      "ring"
+    ],
+    "variants": [
+      {
+        "cost": 18,
+        "modifier": {
+          "type": "special",
+          "key": "三願"
+        },
+        "description": "你可以使用三次許願術，使用後該附魔解消。"
+      }
+    ]
+  },
+  {
+    "id": "王者",
+    "affix_name": "王者",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 10,
+        "modifier": {
+          "type": "special",
+          "key": "王者"
+        },
+        "description": "按下按鈕一：此魔法物品轉為火焰長劍。（附加焰爆增幅7、焰爆6）按下按鈕二：此魔法物品轉為戰斧。（附加鋒利6、光能）按下按鈕三：此魔法物品轉為長矛。（附加 冰爆6、光能）當使用此物品接觸攻擊或是法術攻擊敵方時會觸發人類定身術。持有此物品者可使所有看見此魔法物品之人受到如同恐懼術效果。"
+      }
+    ]
+  },
+  {
+    "id": "金屬偵測感知",
+    "affix_name": "金屬偵測感知",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "金屬偵測感知"
+        },
+        "description": "此權杖會在使用者手中跳動，指出30英尺×此魔法物品總加值內最大的金屬礦藏，也可以指定搜尋特定金屬跟礦物。"
+      }
+    ]
+  },
+  {
+    "id": "雷鳴閃電",
+    "affix_name": "雷鳴閃電",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 8,
+        "modifier": {
+          "type": "special",
+          "key": "雷鳴閃電"
+        },
+        "description": "一日可以使用此魔法物品加值÷三次的閃電擊（標準動作，10D6傷害，最遠達200英尺）當你的法術攻擊時附加5D6聲波傷害與5D6電擊傷害，目標進行強韌減定（強韌－魔法物品等級×5），失敗則耳聾2D6輪。並穿透10點電抗。若爆擊時額外穿透10點電抗。"
+      }
+    ]
+  },
+  {
+    "id": "枯萎",
+    "affix_name": "枯萎",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "枯萎"
+        },
+        "description": "當你使用此魔法物品攻擊人或是使用法術攻擊時，被擊中者造成 1D4 CON、1D4 STR 屬性傷害（每多一層級多1D4）"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "枯萎"
+        },
+        "description": "當你使用此魔法物品攻擊人或是使用法術攻擊時，被擊中者造成 1D4 CON、1D4 STR 屬性傷害（每多一層級多1D4）"
+      },
+      {
+        "cost": 8,
+        "modifier": {
+          "type": "special",
+          "key": "枯萎"
+        },
+        "description": "當你使用此魔法物品攻擊人或是使用法術攻擊時，被擊中者造成 1D4 CON、1D4 STR 屬性傷害（每多一層級多1D4）"
+      }
+    ]
+  },
+  {
+    "id": "偵測敵人",
+    "affix_name": "偵測敵人",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "偵測敵人"
+        },
+        "description": "此權杖會在使用者手中跳動，並指出對持有者居有敵意之生物的方向，偵測範圍為此魔法物品總加值×50英尺。一日使用次數為此魔法物品總加值÷2。每次使用持續此魔法物品總加值×5分鐘。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "偵測敵人"
+        },
+        "description": "此權杖會在使用者手中跳動，並指出對持有者居有敵意之生物的方向，偵測範圍為此魔法物品總加值×50英尺。一日使用次數為此魔法物品總加值÷2。每次使用持續此魔法物品總加值×5分鐘。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "偵測敵人"
+        },
+        "description": "此權杖會在使用者手中跳動，並指出對持有者居有敵意之生物的方向，偵測範圍為此魔法物品總加值×50英尺。一日使用次數為此魔法物品總加值÷2。每次使用持續此魔法物品總加值×5分鐘。"
+      }
+    ]
+  },
+  {
+    "id": "醫療強效",
+    "affix_name": "醫療強效",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "醫療強效"
+        },
+        "description": "你所施展的治療法術追加1D8效果。（每增加一個加值層級則多1D8）此外你的治療法術具有法術射線。（此魔法物品總加值×5英尺）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "醫療強效"
+        },
+        "description": "你所施展的治療法術追加1D8效果。（每增加一個加值層級則多1D8）此外你的治療法術具有法術射線。（此魔法物品總加值×5英尺）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "醫療強效"
+        },
+        "description": "你所施展的治療法術追加1D8效果。（每增加一個加值層級則多1D8）此外你的治療法術具有法術射線。（此魔法物品總加值×5英尺）"
+      }
+    ]
+  },
+  {
+    "id": "警示",
+    "affix_name": "警示",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "警示"
+        },
+        "description": "持有者先功加權值有＋1加值。並且能施展偵測善良（等所有陣營）、偵測魔法、測知謊言、光亮術、識破隱形。（皆為標準動作，無使用次數上限。）若將法杖插入地面要求其警示，法杖會感應到120英尺內意圖傷害持有者的生物，同時半徑20英尺內的友善生物會受到祈禱術的效果，並意識到半徑120英尺內的不友善生物。每日使"
+      }
+    ]
+  },
+  {
+    "id": "不動",
+    "affix_name": "不動",
+    "slots": [
+      "staff"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "不動"
+        },
+        "description": "按下權杖按鈕，此權杖會會停留於原處不動，無論是否違反地心引力。一隻權杖可以支撐8000磅重量而不落下。"
+      }
+    ]
+  },
+  {
+    "id": "烈士意志",
+    "affix_name": "烈士意志",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "烈士意志"
+        },
+        "description": "你的移動速度無法被緩速至基礎速度以下。（基礎速度為DEX調整值。）"
+      }
+    ]
+  },
+  {
+    "id": "空行",
+    "affix_name": "空行",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "空行"
+        },
+        "description": "你視為有凌空而形，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "空行"
+        },
+        "description": "你視為有凌空而形，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "空行"
+        },
+        "description": "你視為有凌空而形，持續時間為此條詞綴加值×10分鐘。"
+      }
+    ]
+  },
+  {
+    "id": "水面行走",
+    "affix_name": "水面行走",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "水面行走"
+        },
+        "description": "你視為有水面行走，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "水面行走"
+        },
+        "description": "你視為有水面行走，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "水面行走"
+        },
+        "description": "你視為有水面行走，持續時間為此條詞綴加值×10分鐘。"
+      }
+    ]
+  },
+  {
+    "id": "飛翔之翼",
+    "affix_name": "飛翔之翼",
+    "slots": [
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "飛翔之翼"
+        },
+        "description": "你視為有飛行術，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "飛翔之翼"
+        },
+        "description": "你視為有飛行術，持續時間為此條詞綴加值×10分鐘。"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "飛翔之翼"
+        },
+        "description": "你視為有飛行術，持續時間為此條詞綴加值×10分鐘。"
+      }
+    ]
+  },
+  {
+    "id": "位移斗篷",
+    "affix_name": "位移斗篷",
+    "slots": [
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "位移斗篷"
+        },
+        "description": "能夠進行瞬步，一次位移15英尺，每日使用次數分別為1/2/3次。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "位移斗篷"
+        },
+        "description": "能夠進行瞬步，一次位移15英尺，每日使用次數分別為1/2/3次。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "位移斗篷"
+        },
+        "description": "能夠進行瞬步，一次位移15英尺，每日使用次數分別為1/2/3次。"
+      }
+    ]
+  },
+  {
+    "id": "繭化",
+    "affix_name": "繭化",
+    "slots": [
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "繭化"
+        },
+        "description": "一個及時動作，披風化作繭包覆住自己，到下一回合開始前自己無法進行任何動作，此繭具有100HP，一日使用1次。"
+      }
+    ]
+  },
+  {
+    "id": "鏡影複製",
+    "affix_name": "鏡影複製",
+    "slots": [
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "鏡影複製"
+        },
+        "description": "你能如同鏡影術一般幻化出8個分身，使用次數為每日2次。"
+      }
+    ]
+  },
+  {
+    "id": "空間跳躍",
+    "affix_name": "空間跳躍",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "空間跳躍"
+        },
+        "description": "你視為能夠使用任意門，一日使用次數為2、3次。"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "空間跳躍"
+        },
+        "description": "你視為能夠使用任意門，一日使用次數為2、3次。"
+      }
+    ]
+  },
+  {
+    "id": "北地",
+    "affix_name": "北地",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "北地"
+        },
+        "description": "穿戴者能在雪地上正常行走，不會留下任何足跡，且可以用半速在冰面上行走，不會滑倒或是跌倒。穿戴者常可保暖，如同忍受元素傷害法術作用。"
+      }
+    ]
+  },
+  {
+    "id": "神射",
+    "affix_name": "神射",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "神射"
+        },
+        "description": "穿戴者可以熟悉所有弓類武器（十字弓除外，如同擁有3級武器使用。），若本身級擅長使用弓類，則命中追加＋5/＋10加值，同時傷害追加＋2/＋4。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "神射"
+        },
+        "description": "穿戴者可以熟悉所有弓類武器（十字弓除外，如同擁有3級武器使用。），若本身級擅長使用弓類，則命中追加＋5/＋10加值，同時傷害追加＋2/＋4。"
+      }
+    ]
+  },
+  {
+    "id": "防禦",
+    "affix_name": "防禦",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "防禦"
+        },
+        "description": "穿戴者擁有3/6/9物抗。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "防禦"
+        },
+        "description": "穿戴者擁有3/6/9物抗。"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "防禦"
+        },
+        "description": "穿戴者擁有3/6/9物抗。"
+      }
+    ]
+  },
+  {
+    "id": "游泳攀爬",
+    "affix_name": "游泳、攀爬",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "游泳攀爬"
+        },
+        "description": "你的游泳與攀爬具有＋25加值。"
+      }
+    ]
+  },
+  {
+    "id": "儲物",
+    "affix_name": "儲物",
+    "slots": [
+      "gloves",
+      "belt"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "儲物"
+        },
+        "description": "你的手套內能各藏40磅的物體，且能被單手握住，物品存放視為停滯狀態且不計重量，能及時拿出儲物空間內的物品。"
+      }
+    ]
+  },
+  {
+    "id": "重拳打臉",
+    "affix_name": "重拳【打臉】",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "重拳打臉"
+        },
+        "description": "穿戴者使用徒手打擊或是天生武器時，攻擊檢定有＋5/＋10/＋15/＋20/＋25的加值，傷害有1/2/3/4/5的傷害加值。"
+      },
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "重拳打臉"
+        },
+        "description": "穿戴者使用徒手打擊或是天生武器時，攻擊檢定有＋5/＋10/＋15/＋20/＋25的加值，傷害有1/2/3/4/5的傷害加值。"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "重拳打臉"
+        },
+        "description": "穿戴者使用徒手打擊或是天生武器時，攻擊檢定有＋5/＋10/＋15/＋20/＋25的加值，傷害有1/2/3/4/5的傷害加值。"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "重拳打臉"
+        },
+        "description": "穿戴者使用徒手打擊或是天生武器時，攻擊檢定有＋5/＋10/＋15/＋20/＋25的加值，傷害有1/2/3/4/5的傷害加值。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "重拳打臉"
+        },
+        "description": "穿戴者使用徒手打擊或是天生武器時，攻擊檢定有＋5/＋10/＋15/＋20/＋25的加值，傷害有1/2/3/4/5的傷害加值。"
+      }
+    ]
+  },
+  {
+    "id": "賢者之手",
+    "affix_name": "賢者之手",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "賢者之手"
+        },
+        "description": "你進行製作物品的相關技能時，追加一個技能等級。（能增幅的等級僅有調製藥水、製造奇物、抄錄卷軸、製作魔法物品及防具、製造權杖、製造魔杖、製造長杖、鍛造戒指、刻劃符文）注：最高僅能增加至等級六，僅能進行一次增幅。"
+      }
+    ]
+  },
+  {
+    "id": "精準",
+    "affix_name": "精準",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "精準"
+        },
+        "description": "你的攻擊命中檢定追加＋10/＋15/＋20加值，爆擊範圍追加2/4/6%範圍。"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "精準"
+        },
+        "description": "你的攻擊命中檢定追加＋10/＋15/＋20加值，爆擊範圍追加2/4/6%範圍。"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "精準"
+        },
+        "description": "你的攻擊命中檢定追加＋10/＋15/＋20加值，爆擊範圍追加2/4/6%範圍。"
+      }
+    ]
+  },
+  {
+    "id": "流星",
+    "affix_name": "流星",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "流星"
+        },
+        "description": "你射出的子彈會形成子母彈之形式，母彈在前而子彈在後，子彈會形成追尾且傷害為母彈總傷害之一半。"
+      }
+    ]
+  },
+  {
+    "id": "冰冷穿透",
+    "affix_name": "冰冷穿透",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "冰冷穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點冰抗（每增加一個加值層級則多穿透10點冰抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "冰冷穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點冰抗（每增加一個加值層級則多穿透10點冰抗）"
+      }
+    ]
+  },
+  {
+    "id": "火焰穿透",
+    "affix_name": "火焰穿透",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "火焰穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點火抗（每增加一個加值層級則多穿透10點火抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "火焰穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點火抗（每增加一個加值層級則多穿透10點火抗）"
+      }
+    ]
+  },
+  {
+    "id": "閃電穿透",
+    "affix_name": "閃電穿透",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "閃電穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點電抗（每增加一個加值層級則多穿透10點電抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "閃電穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點電抗（每增加一個加值層級則多穿透10點電抗）"
+      }
+    ]
+  },
+  {
+    "id": "酸蝕穿透",
+    "affix_name": "酸蝕穿透",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "酸蝕穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點酸抗（每增加一個加值層級則多穿透10點酸抗）"
+      },
+      {
+        "cost": 7,
+        "modifier": {
+          "type": "special",
+          "key": "酸蝕穿透"
+        },
+        "description": "你的攻擊與法術可以穿透10點酸抗（每增加一個加值層級則多穿透10點酸抗）"
+      }
+    ]
+  },
+  {
+    "id": "聚焦",
+    "affix_name": "聚焦",
+    "slots": [
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "聚焦"
+        },
+        "description": "你在面對敵人的察言觀色、唬騙、威嚇的相關交涉檢定有10點加值（每增加一個加值層級則多5加值）"
+      },
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "聚焦"
+        },
+        "description": "你在面對敵人的察言觀色、唬騙、威嚇的相關交涉檢定有10點加值（每增加一個加值層級則多5加值）"
+      },
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "聚焦"
+        },
+        "description": "你在面對敵人的察言觀色、唬騙、威嚇的相關交涉檢定有10點加值（每增加一個加值層級則多5加值）"
+      }
+    ]
+  },
+  {
+    "id": "大小變換",
+    "affix_name": "大小變換",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "大小變換"
+        },
+        "description": "你以一自由動作切換附有此詞綴的魔法物品的武器大小(輕型、重型)"
+      }
+    ]
+  },
+  {
+    "id": "致命精確",
+    "affix_name": "致命精確",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "致命精確"
+        },
+        "description": "當你偷襲攻擊命中敵人可以追加3D6傷害。當你攻擊命中敵人且暴擊時追加2D6傷害。"
+      }
+    ]
+  },
+  {
+    "id": "欺詐",
+    "affix_name": "欺詐",
+    "slots": [
+      "weapon"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "欺詐"
+        },
+        "description": "當以持有此詞綴的魔法物品進行精通佯攻時有額外20加值。當敵方被持有此詞綴的魔法物品的人物成功進行佯攻後，在1D2輪內該敵方的藉機攻擊無法對持有此詞綴的魔法物品的人物生效。"
+      }
+    ]
+  },
+  {
+    "id": "歌唱",
+    "affix_name": "歌唱",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "歌唱"
+        },
+        "description": "每日可以使用1次歌唱。(增加一個加值層級則多一次使用次數)你可以一個不會引發藉機攻擊的自由動作並花費一次歌唱次數啟動此詞綴。你的下一發攻擊命中檢定增加CHA，並加CHA調整值附加到該次傷害上。持有此詞綴的魔法物品的人物進行表演檢定獲得10加值"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "歌唱"
+        },
+        "description": "每日可以使用1次歌唱。(增加一個加值層級則多一次使用次數)你可以一個不會引發藉機攻擊的自由動作並花費一次歌唱次數啟動此詞綴。你的下一發攻擊命中檢定增加CHA，並加CHA調整值附加到該次傷害上。持有此詞綴的魔法物品的人物進行表演檢定獲得10加值"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "歌唱"
+        },
+        "description": "每日可以使用1次歌唱。(增加一個加值層級則多一次使用次數)你可以一個不會引發藉機攻擊的自由動作並花費一次歌唱次數啟動此詞綴。你的下一發攻擊命中檢定增加CHA，並加CHA調整值附加到該次傷害上。持有此詞綴的魔法物品的人物進行表演檢定獲得10加值"
+      }
+    ]
+  },
+  {
+    "id": "弓杖",
+    "affix_name": "弓杖",
+    "slots": [
+      "weapon",
+      "staff",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 1,
+        "modifier": {
+          "type": "special",
+          "key": "弓杖"
+        },
+        "description": "你以一自由動作將附有此詞綴的魔法物品切換成長弓或是短杖。"
+      }
+    ]
+  },
+  {
+    "id": "豹爪",
+    "affix_name": "豹爪",
+    "slots": [
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "豹爪"
+        },
+        "description": "你獲得黑暗視覺，並在攀爬檢定有25加值。"
+      }
+    ]
+  },
+  {
+    "id": "防禦精熟",
+    "affix_name": "防禦精熟",
+    "slots": [
+      "weapon",
+      "gun",
+      "gloves"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "防禦精熟"
+        },
+        "description": "進行格擋檢定有10加值，且不會引發夾擊。"
+      }
+    ]
+  },
+  {
+    "id": "游擊",
+    "affix_name": "游擊",
+    "slots": [
+      "weapon",
+      "gun"
+    ],
+    "variants": [
+      {
+        "cost": 2,
+        "modifier": {
+          "type": "special",
+          "key": "游擊"
+        },
+        "description": "當你攻擊命中的敵人承受DEX負向減值時，額外造成1D6傷害。(每增加一個加值層級則多1D6傷害)當你攻擊命中未有承受DEX負向減值的敵人時，對方須進行游擊檢定失敗則承受1點DEX減值，該減值持續1分鐘。成功則直到常休息前該游擊效果不會對該敵方造成作用。(該效果僅會對同一敵人生效一次)游擊檢定=抗魔法"
+      },
+      {
+        "cost": 4,
+        "modifier": {
+          "type": "special",
+          "key": "游擊"
+        },
+        "description": "當你攻擊命中的敵人承受DEX負向減值時，額外造成1D6傷害。(每增加一個加值層級則多1D6傷害)當你攻擊命中未有承受DEX負向減值的敵人時，對方須進行游擊檢定失敗則承受1點DEX減值，該減值持續1分鐘。成功則直到常休息前該游擊效果不會對該敵方造成作用。(該效果僅會對同一敵人生效一次)游擊檢定=抗魔法"
+      },
+      {
+        "cost": 6,
+        "modifier": {
+          "type": "special",
+          "key": "游擊"
+        },
+        "description": "當你攻擊命中的敵人承受DEX負向減值時，額外造成1D6傷害。(每增加一個加值層級則多1D6傷害)當你攻擊命中未有承受DEX負向減值的敵人時，對方須進行游擊檢定失敗則承受1點DEX減值，該減值持續1分鐘。成功則直到常休息前該游擊效果不會對該敵方造成作用。(該效果僅會對同一敵人生效一次)游擊檢定=抗魔法"
+      }
+    ]
+  },
+  {
+    "id": "重力",
+    "affix_name": "重力",
+    "slots": [
+      "boots"
+    ],
+    "variants": [
+      {
+        "cost": 5,
+        "modifier": {
+          "type": "special",
+          "key": "重力"
+        },
+        "description": "穿戴者可以讓角色選擇作用於穿戴者和其裝備上的重力的方向。角色可以在任何固體表面上透過想像「下方」存在於其腳下而正常行走。角色每輪都可以以一個自由動作做一次這種選擇。如果穿戴者丟下附有此詞綴的魔法物品，丟下的物品將依正常的重力落向地面。穿戴靴子者可以攜帶上另一個活物，該活物的重力方向就和穿戴者是相同的"
+      }
+    ]
+  },
+  {
+    "id": "幽影",
+    "affix_name": "幽影",
+    "slots": [
+      "armor",
+      "cloak"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "幽影"
+        },
+        "description": "配戴者在照明昏暗的區域中的躲藏檢定上有+25加值，但在光亮區域的躲藏檢定承受25減值。另外，當配戴者陷入完全黑暗中時，每天一次至多1分鐘可以變成虛體。"
+      }
+    ]
+  },
+  {
+    "id": "連線",
+    "affix_name": "連線",
+    "slots": [
+      "armor",
+      "shield"
+    ],
+    "variants": [
+      {
+        "cost": 3,
+        "modifier": {
+          "type": "special",
+          "key": "連線"
+        },
+        "description": "每日可啟用三次，每次持續1小時。啟動後，穿戴者可以和10里內任何或所有穿戴或持有連線特性防具的生物建立心靈感應。即使雙方語言不通，也可透過心靈感應無礙溝通。"
+      }
+    ]
+  }
+]
