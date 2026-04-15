@@ -132,7 +132,7 @@ func cast_success_rate(this_ring: int) -> int:
 	return cast_base_rate - cast_cumulative_penalty - this_ring
 
 # ── 裝備欄位 ──────────────────────────────────────
-const EQUIP_SLOTS = ["頭環","手套","手環","身體（盔甲）","披風","腰帶","鞋子","項鍊","戒指 1","戒指 2","主手武器","副手/法杖"]
+const EQUIP_SLOTS = ["頭環","手套","手環","身體（盔甲）","披風","腰帶","鞋子","項鍊","戒指 1","戒指 2","主手","副手"]
 # 8 個保留擴充位（尚未顯示）
 const EQUIP_SLOTS_EXPANSION = ["擴充 1","擴充 2","擴充 3","擴充 4","擴充 5","擴充 6","擴充 7","擴充 8"]
 

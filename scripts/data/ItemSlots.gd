@@ -5,11 +5,11 @@
 class_name ItemSlots
 
 const TYPES: Dictionary = {
-	"weapon":   { "label": "武器",     "equip_slots": ["主手武器"] },
+	"weapon":   { "label": "武器",     "equip_slots": ["主手"] },
 	"armor":    { "label": "鎧甲",     "equip_slots": ["身體（盔甲）"] },
-	"shield":   { "label": "盾牌",     "equip_slots": ["副手/法杖"] },
-	"staff":    { "label": "法杖",     "equip_slots": ["副手/法杖"] },
-	"gun":      { "label": "魔導槍械", "equip_slots": ["主手武器", "副手/法杖"] },
+	"shield":   { "label": "盾牌",     "equip_slots": ["副手"] },
+	"staff":    { "label": "法杖",     "equip_slots": ["主手", "副手"] },
+	"gun":      { "label": "魔導槍械", "equip_slots": ["主手", "副手"] },
 	"headband": { "label": "頭環",     "equip_slots": ["頭環"] },
 	"gloves":   { "label": "手套",     "equip_slots": ["手套"] },
 	"bracelet": { "label": "手環",     "equip_slots": ["手環"] },
