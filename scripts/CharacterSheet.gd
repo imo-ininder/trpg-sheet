@@ -85,7 +85,7 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_page_equip.add_child(_equip_tab_panel)
 	_equip_tab_panel.equip_changed.connect(_recompute)
 
-	_build_special_abilities_section(_page_equip)
+	_build_special_abilities_section(_equip_tab_panel._main_hbox)
 
 func switch_tab(tab: String) -> void:
 	_page_char.visible  = (tab == "腳色")
@@ -892,7 +892,6 @@ func _recompute() -> void:
 	flush_to_data()
 	var stats := StatEngine.compute(_data)
 	_apply_stats(stats)
-	_update_special_abilities()
 
 ## 將 StatEngine 輸出寫入所有唯讀顯示元件
 func _apply_stats(stats: Dictionary) -> void:
@@ -920,48 +919,45 @@ func _apply_stats(stats: Dictionary) -> void:
 	if _soul_labels.has("強韌"): _soul_labels["強韌"].text = str(stats.get("fortitude", 0))
 	if _soul_labels.has("精神"): _soul_labels["精神"].text = str(stats.get("spirit",    0))
 	if _soul_labels.has("靈魂"): _soul_labels["靈魂"].text = str(stats.get("soul",      0))
+	_update_special_abilities(stats)
 
-## 更新特殊能力顯示（只顯示 affixes 描述，垂直列表）
-func _update_special_abilities() -> void:
+## 更新特殊能力顯示
+func _update_special_abilities(stats: Dictionary) -> void:
 	if _data == null or _special_abilities_label == null:
 		return
 
-	var descriptions: Array = []
+	var lines: Array = []
 
-	# 遍歷所有裝備槽
+	# ── DEBUG：extra_skills ──────────────────────────
+	var extra_skills: Dictionary = stats.get("extra_skills", {})
+	lines.append("[b][color=yellow]extra_skills（%d 種）[/color][/b]" % extra_skills.size())
+	for key in extra_skills:
+		lines.append("  • %s  ×%d" % [key, extra_skills[key]])
+
+	# ── special 效果（舊路徑，保留）────────────────────
+	var descriptions: Array = []
 	for slot in _data.equipment:
 		var item_id: String = _data.equipment[slot]
-		if item_id == "":
-			continue
-
-		# 找到對應道具
+		if item_id == "": continue
 		var item: Dictionary = {}
 		for it in _data.item_library:
 			if it.get("id", "") == item_id:
 				item = it
 				break
-
-		if item.is_empty():
-			continue
-
-		# 檢查每個 mod 是否為 special
+		if item.is_empty(): continue
 		for mod in item.get("mods", []):
-			var affix_id: String = mod.get("affix_id", "")
+			var affix := AffixLibrary.get_affix(mod.get("affix_id", ""))
+			if affix == null: continue
 			var cost: int = mod.get("cost", 0)
-
-			var affix := AffixLibrary.get_affix(affix_id)
-			if affix == null:
-				continue
-
 			if affix.is_special(cost):
-				var description := affix.get_description(cost)
-				descriptions.append(description)
+				descriptions.append(affix.get_description(cost))
 
-	# 組裝顯示文字（只顯示 description，垂直列表）
-	if descriptions.is_empty():
-		_special_abilities_label.text = "[color=gray][i]（無）[/i][/color]"
-	else:
-		_special_abilities_label.text = "\n\n".join(descriptions)
+	if not descriptions.is_empty():
+		lines.append("")
+		lines.append_array(descriptions)
+
+	_special_abilities_label.text = "\n".join(lines) if not lines.is_empty() \
+		else "[color=gray][i]（無）[/i][/color]"
 
 # ── 資料載入 / 回寫 ───────────────────────────────
 func load_data(data: CharacterData) -> void:

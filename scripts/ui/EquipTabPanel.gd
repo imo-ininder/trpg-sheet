@@ -20,6 +20,7 @@ var _item_slot_opt: OptionButton        # slot key OptionButton
 var _item_mods_vb: VBoxContainer
 var _item_mod_rows: Array = []          # [{affix_opt, tier_opt, row}]
 var _item_viewer_label: RichTextLabel
+var _main_hbox: HBoxContainer
 var _max_bonus_slider: HSlider
 var _max_bonus_val_lbl: Label
 var _budget_label: Label
@@ -37,15 +38,15 @@ func set_data(data: CharacterData) -> void:
 
 # ── 建立 UI ───────────────────────────────────────
 func _build_ui() -> void:
-	var hbox = HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 12)
-	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL
-	add_child(hbox)
-	_build_slots_panel(hbox)
-	_build_list_panel(hbox)
-	_build_editor_panel(hbox)
-	_build_viewer_panel(hbox)
+	_main_hbox = HBoxContainer.new()
+	_main_hbox.add_theme_constant_override("separation", 12)
+	_main_hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_main_hbox.size_flags_vertical   = Control.SIZE_EXPAND_FILL
+	add_child(_main_hbox)
+	_build_slots_panel(_main_hbox)
+	_build_list_panel(_main_hbox)
+	_build_editor_panel(_main_hbox)
+	_build_viewer_panel(_main_hbox)
 
 # ── 左側：裝備槽 ──────────────────────────────────
 func _build_slots_panel(parent: HBoxContainer) -> void:
