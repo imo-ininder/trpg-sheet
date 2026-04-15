@@ -16,18 +16,17 @@ run/main_scene="res://scenes/MainScene.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
-[display]
-
-window/size/viewport_width=1440
-window/size/viewport_height=900
-window/size/resizable=true
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
-
 [autoload]
 
 CharacterManager="*res://scripts/CharacterManager.gd"
 AffixLibrary="*res://scripts/data/AffixLibrary.gd"
+
+[display]
+
+window/size/viewport_width=1440
+window/size/viewport_height=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [dotnet]
 

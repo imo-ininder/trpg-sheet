@@ -7,12 +7,9 @@ extends Control
 var _data: CharacterData = null
 
 # 用來追蹤每個 UI 元件，方便 flush_to_data 時回寫
-var _attr_inputs: Dictionary = {}       # "STR_base", "STR_bonus" -> LineEdit（顯示）
-var _attr_hidden: Dictionary = {}       # "STR_equip", "STR_temp" -> int（隱藏，留給裝備/技能連動）
+var _attr_inputs: Dictionary = {}       # "STR_base", "STR_modifier" -> LineEdit / Label
 var _attr_totals: Dictionary = {}       # "STR" -> Label
-var _compound_hidden: Dictionary = {}   # "戰鬥_adj", "戰鬥_temp" -> int（隱藏）
 var _compound_totals: Dictionary = {}
-var _resist_hidden: Dictionary = {}     # "抗毒素_adj" ... -> int（隱藏）
 var _resist_totals: Dictionary = {}
 var _soul_labels: Dictionary = {}       # "強韌"/"精神"/"靈魂" -> Label（唯讀顯示）
 var _elem_resist_inputs: Dictionary = {} # "法抗"/"物抗"/"火"... -> LineEdit
@@ -83,7 +80,7 @@ func _build_pages(parent: VBoxContainer) -> void:
 
 	_equip_tab_panel = EquipTabPanel.new()
 	_page_equip.add_child(_equip_tab_panel)
-	_equip_tab_panel.equip_changed.connect(_recalc_equip_stats)
+	_equip_tab_panel.equip_changed.connect(_recompute)
 
 func switch_tab(tab: String) -> void:
 	_page_char.visible  = (tab == "腳色")
@@ -200,10 +197,6 @@ func _build_attrs(panel: PanelContainer) -> void:
 	vb.add_child(grid)
 
 	for attr in CharacterData.ATTR_NAMES:
-		# 隱藏值初始化（裝備/臨時，之後由裝備與技能系統寫入）
-		_attr_hidden[attr + "_equip"] = 0
-		_attr_hidden[attr + "_temp"]  = 0
-
 		# 卡片外框
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -255,7 +248,7 @@ func _build_attrs(panel: PanelContainer) -> void:
 		base_le.add_theme_font_size_override("font_size", 10)
 		base_le.custom_minimum_size.y = 22
 		_attr_inputs[attr + "_base"] = base_le
-		base_le.text_changed.connect(func(_v): _recalc_attr(attr))
+		base_le.text_changed.connect(func(_v): _recompute())
 		base_col.add_child(base_le)
 		row.add_child(base_col)
 
@@ -294,9 +287,6 @@ func _build_compound(parent: VBoxContainer) -> void:
 	vb.add_child(grid)
 
 	for name in CharacterData.COMPOUND_NAMES:
-		_compound_hidden[name + "_adj"]  = 0
-		_compound_hidden[name + "_temp"] = 0
-
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var card_vb = VBoxContainer.new()
@@ -346,9 +336,6 @@ func _build_compound_section(parent: VBoxContainer) -> void:
 	section_vb.add_child(grid)
 
 	for name in CharacterData.COMPOUND_NAMES:
-		_compound_hidden[name + "_adj"]  = 0
-		_compound_hidden[name + "_temp"] = 0
-
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -363,7 +350,7 @@ func _build_compound_section(parent: VBoxContainer) -> void:
 		card_vb.add_child(name_lbl)
 
 		var total_lbl = Label.new()
-		total_lbl.text = "39"
+		total_lbl.text = "0"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		total_lbl.add_theme_font_size_override("font_size", 18)
 		_compound_totals[name] = total_lbl
@@ -385,9 +372,6 @@ func _build_resists(parent: VBoxContainer) -> void:
 	vb.add_child(grid)
 
 	for name in CharacterData.RESIST_NAMES:
-		_resist_hidden[name + "_adj"]  = 0
-		_resist_hidden[name + "_temp"] = 0
-
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var card_vb = VBoxContainer.new()
@@ -401,7 +385,7 @@ func _build_resists(parent: VBoxContainer) -> void:
 		card_vb.add_child(name_lbl)
 
 		var total_lbl = Label.new()
-		total_lbl.text = "26"
+		total_lbl.text = "0"
 		total_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		total_lbl.add_theme_font_size_override("font_size", 18)
 		_resist_totals[name] = total_lbl
@@ -437,9 +421,6 @@ func _build_resists_section(parent: VBoxContainer) -> void:
 	section_vb.add_child(grid)
 
 	for name in CharacterData.RESIST_NAMES:
-		_resist_hidden[name + "_adj"]  = 0
-		_resist_hidden[name + "_temp"] = 0
-
 		var card = PanelContainer.new()
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		card.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -557,7 +538,7 @@ func _build_resources(parent: VBoxContainer) -> void:
 				le.add_theme_font_size_override("font_size", 12)
 				if key == "hp": _hp_inputs[suffix] = le
 				else:           _mp_inputs[suffix] = le
-				le.text_changed.connect(func(_v): _recalc_resource(key))
+				le.text_changed.connect(func(_v): _recompute())
 				col.add_child(le)
 
 			sub_row.add_child(col)
@@ -877,130 +858,41 @@ func _update_skill_scroll_height(cat: String) -> void:
 		# 初始化階段，先設定為需要的高度
 		scroll.custom_minimum_size.y = needed_height
 
-# ── 計算邏輯 ──────────────────────────────────────
-func _recalc_attr(attr: String) -> void:
-	# 取得基礎值
-	var base_le = _attr_inputs.get(attr + "_base")
-	var base_val = 13
-	if base_le and base_le.text.is_valid_int():
-		base_val = int(base_le.text)
+# ── Stat Engine 整合 ──────────────────────────────
+## 單一計算入口：flush → StatEngine.compute → _apply_stats
+func _recompute() -> void:
+	if _data == null: return
+	flush_to_data()
+	var stats := StatEngine.compute(_data)
+	_apply_stats(stats)
 
-	# 計算加減值：(基礎值 - 13) / 2，無條件進位
-	var modifier = int(ceil((base_val - 13) / 2.0))
-
-	# 更新加減值顯示（唯讀 Label）
-	var mod_label = _attr_inputs.get(attr + "_modifier")
-	if mod_label:
-		mod_label.text = str(modifier) if modifier >= 0 else str(modifier)
-
-	# 計算總和：基礎值 + 裝備 + 臨時 + 加減值
-	var total = base_val
-	total += _attr_hidden.get(attr + "_equip", 0)
-	total += _attr_hidden.get(attr + "_temp",  0)
-	total += modifier  # 加上加減值
-
-	# 更新總和顯示
-	if _attr_totals.has(attr):
-		_attr_totals[attr].text = str(total)
-
-	# 更新強韌/精神/靈魂（如果相關屬性改變）
-	if attr == "CON" and _soul_labels.has("強韌"):
-		_soul_labels["強韌"].text = str(base_val * 5)
-	elif attr == "RES" and _soul_labels.has("精神"):
-		_soul_labels["精神"].text = str(base_val * 5)
-	elif attr == "SPI" and _soul_labels.has("靈魂"):
-		_soul_labels["靈魂"].text = str(base_val * 5)
-
-	# 更新判定複合數值（如果相關屬性改變）
-	_recalc_all_compounds()
-
-	# 更新抗性數值（如果相關屬性改變）
-	_recalc_all_resists()
-
-	# 更新生命/魔力基礎值（如果 CON/RES 改變）
-	if attr == "CON":
-		_recalc_resource("hp")
-	elif attr == "RES":
-		_recalc_resource("mp")
-
-func _recalc_compound(name: String) -> void:
-	# 從 UI 取得當前屬性總和（最終數值）
-	var base_value = 0
-	match name:
-		"戰鬥":
-			base_value = _get_attr_total("STR") + _get_attr_total("DEX") + _get_attr_total("SKI")
-		"運動":
-			base_value = _get_attr_total("DEX") + _get_attr_total("SKI") + _get_attr_total("CON")
-		"操作":
-			base_value = _get_attr_total("SKI") + _get_attr_total("INT") + _get_attr_total("WIS")
-		"感知":
-			base_value = _get_attr_total("RES") + _get_attr_total("INT") + _get_attr_total("SPI")
-		"知識":
-			base_value = int(floor((_get_attr_total("INT") + _get_attr_total("WIS")) * 1.5))
-		"交涉":
-			base_value = _get_attr_total("WIS") + _get_attr_total("CHA") + _get_attr_total("SPI")
-
-	# 加上調整值和臨時值
-	var adj  = _compound_hidden.get(name + "_adj",  0)
-	var temp = _compound_hidden.get(name + "_temp", 0)
-	var total = base_value + adj + temp
-
-	if _compound_totals.has(name):
-		_compound_totals[name].text = str(total)
-
-func _recalc_all_compounds() -> void:
+## 將 StatEngine 輸出寫入所有唯讀顯示元件
+func _apply_stats(stats: Dictionary) -> void:
+	# 屬性 total + modifier
+	for attr in CharacterData.ATTR_NAMES:
+		if _attr_totals.has(attr):
+			_attr_totals[attr].text = str(stats.get(attr, 0))
+		var mod_lbl = _attr_inputs.get(attr + "_modifier")
+		if mod_lbl:
+			mod_lbl.text = str(stats.get(attr + "_modifier", 0))
+	# HP / MP readonly labels
+	if _hp_inputs.has("base"):    _hp_inputs["base"].text    = str(stats.get("hp_base", 0))
+	if _hp_inputs.has("max_lbl"): _hp_inputs["max_lbl"].text = str(stats.get("hp_max",  0))
+	if _mp_inputs.has("base"):    _mp_inputs["base"].text    = str(stats.get("mp_base", 0))
+	if _mp_inputs.has("max_lbl"): _mp_inputs["max_lbl"].text = str(stats.get("mp_max",  0))
+	# 複合數值
 	for name in CharacterData.COMPOUND_NAMES:
-		_recalc_compound(name)
-
-func _recalc_all_resists() -> void:
+		if _compound_totals.has(name):
+			_compound_totals[name].text = str(stats.get("compound_" + name, 0))
+	# 判定抗性
 	for name in CharacterData.RESIST_NAMES:
-		_recalc_resist(name)
+		if _resist_totals.has(name):
+			_resist_totals[name].text = str(stats.get("resist_" + name, 0))
+	# 靈魂數值
+	if _soul_labels.has("強韌"): _soul_labels["強韌"].text = str(stats.get("fortitude", 0))
+	if _soul_labels.has("精神"): _soul_labels["精神"].text = str(stats.get("spirit",    0))
+	if _soul_labels.has("靈魂"): _soul_labels["靈魂"].text = str(stats.get("soul",      0))
 
-# 從 UI 取得屬性總和
-func _get_attr_total(attr: String) -> int:
-	var total_label = _attr_totals.get(attr)
-	if total_label and total_label.text.is_valid_int():
-		return int(total_label.text)
-	return 13  # 預設值
-
-func _recalc_resist(name: String) -> void:
-	# 從 UI 取得當前屬性總和計算抗性基礎值
-	var base_value = 0
-	match name:
-		"抗毒素":
-			base_value = _get_attr_total("CON") + _get_attr_total("RES")
-		"抗控制":
-			base_value = _get_attr_total("RES") + _get_attr_total("WIS")
-		"抗轉化":
-			base_value = _get_attr_total("RES") * 2
-		"抗噴吐":
-			base_value = _get_attr_total("RES") + _get_attr_total("DEX")
-		"抗魔法":
-			base_value = _get_attr_total("RES") + _get_attr_total("INT")
-
-	var adj  = _resist_hidden.get(name + "_adj",  0)
-	var temp = _resist_hidden.get(name + "_temp", 0)
-	var total = base_value + adj + temp
-
-	if _resist_totals.has(name):
-		_resist_totals[name].text = str(total)
-
-func _recalc_resource(key: String) -> void:
-	var inputs = _hp_inputs if key == "hp" else _mp_inputs
-
-	# 自動設定基礎值：生命 = CON，魔力 = RES
-	if key == "hp":
-		var con_total = _get_attr_total("CON")
-		inputs["base"].text = str(con_total)
-	else:  # mp
-		var res_total = _get_attr_total("RES")
-		inputs["base"].text = str(res_total)
-
-	var total = 0
-	for s in ["base", "bonus", "cp"]:
-		var le = inputs.get(s)
-		if le: total += int(le.text) if le.text.is_valid_int() else 0
-	inputs["max_lbl"].text = str(total)
 
 # ── 資料載入 / 回寫 ───────────────────────────────
 func load_data(data: CharacterData) -> void:
@@ -1011,57 +903,41 @@ func load_data(data: CharacterData) -> void:
 	_age_edit.text   = data.age
 	_align_edit.text = data.alignment
 	_cp_edit.text    = str(data.cp)
+	# 屬性 base（唯讀欄位由 _recompute → _apply_stats 更新）
 	for attr in CharacterData.ATTR_NAMES:
 		_attr_inputs[attr + "_base"].text = str(data.attr_base.get(attr, 13))
-		# 裝備/臨時存入隱藏字典，之後系統連動時使用
-		_attr_hidden[attr + "_equip"] = data.attr_equip.get(attr, 0)
-		_attr_hidden[attr + "_temp"]  = data.attr_temp.get(attr, 0)
-		# 加減值會在 _recalc_attr 中自動計算
-		_recalc_attr(attr)
 
-	# 複合數值的調整值
-	for name in CharacterData.COMPOUND_NAMES:
-		_compound_hidden[name + "_adj"]  = data.compound_adj.get(name, 0)
-		_compound_hidden[name + "_temp"] = data.compound_temp.get(name, 0)
-
-	# 屬性載入完成後，更新所有複合數值和抗性
-	_recalc_all_compounds()
-	for name in CharacterData.RESIST_NAMES:
-		_resist_hidden[name + "_adj"]  = data.resist_adj.get(name, 0)
-		_resist_hidden[name + "_temp"] = data.resist_temp.get(name, 0)
-	_recalc_all_resists()
-	# 強韌/精神/靈魂：自動從屬性計算
-	_soul_labels["強韌"].text = str(data.calc_fortitude())
-	_soul_labels["精神"].text = str(data.calc_spirit())
-	_soul_labels["靈魂"].text = str(data.calc_soul())
-	# 物理/元素抗性
-	var elem_map = {
+	# 物理/元素抗性（user-editable，由使用者直接輸入）
+	var elem_keys := {
 		"法抗": data.magic_resist, "物抗": data.phys_resist,
 		"火": data.res_fire,  "冰": data.res_ice,  "電": data.res_lightning,
 		"酸": data.res_acid,  "音": data.res_sound, "心": data.res_psychic,
 		"光": data.res_light, "暗": data.res_dark,
 	}
-	for k in elem_map:
+	for k in elem_keys:
 		if _elem_resist_inputs.has(k):
-			_elem_resist_inputs[k].text = str(elem_map[k])
+			_elem_resist_inputs[k].text = str(elem_keys[k])
+
 	# 貨幣顯示
 	_currency_display.text = "白金:%d  金:%d  銀:%d  銅:%d" % [
 		data.currency_platinum, data.currency_gold,
 		data.currency_silver,   data.currency_copper
 	]
-	# HP/MP：基礎值由 CON/RES 自動計算，只載入 bonus/cp/current
+
+	# HP/MP user-input 欄位
 	_hp_inputs["bonus"].text = str(data.hp_bonus)
-	_hp_inputs["cp"].text = str(data.hp_cp)
+	_hp_inputs["cp"].text    = str(data.hp_cp)
 	_hp_inputs["current"].text = str(data.hp_current)
-	_recalc_resource("hp")  # 會自動設定 base = CON
 	_mp_inputs["bonus"].text = str(data.mp_bonus)
-	_mp_inputs["cp"].text = str(data.mp_cp)
+	_mp_inputs["cp"].text    = str(data.mp_cp)
 	_mp_inputs["current"].text = str(data.mp_current)
-	_recalc_resource("mp")  # 會自動設定 base = RES
+
 	# 裝備 tab
 	if _equip_tab_panel:
 		_equip_tab_panel.set_data(data)
-	_recalc_equip_stats()
+
+	# 統一觸發全量計算，更新所有唯讀顯示
+	_recompute()
 
 func flush_to_data() -> void:
 	if _data == null: return
@@ -1072,22 +948,9 @@ func flush_to_data() -> void:
 	_data.alignment  = _align_edit.text
 	_data.cp         = int(_cp_edit.text) if _cp_edit.text.is_valid_int() else 0
 	for attr in CharacterData.ATTR_NAMES:
-		_data.attr_base[attr] = int(_attr_inputs[attr+"_base"].text) if _attr_inputs[attr+"_base"].text.is_valid_int() else 13
-		# bonus 現在由加減值公式自動計算，不再手動設定
-		_data.attr_bonus[attr] = _data.attr_modifier(attr)
-		# 裝備/臨時從隱藏字典回寫，保留外部系統寫入的值
-		_data.attr_equip[attr] = _attr_hidden.get(attr + "_equip", 0)
-		_data.attr_temp[attr]  = _attr_hidden.get(attr + "_temp",  0)
-	for name in CharacterData.COMPOUND_NAMES:
-		_data.compound_adj[name]  = _compound_hidden.get(name + "_adj",  0)
-		_data.compound_temp[name] = _compound_hidden.get(name + "_temp", 0)
-	for name in CharacterData.RESIST_NAMES:
-		_data.resist_adj[name]  = _resist_hidden.get(name + "_adj",  0)
-		_data.resist_temp[name] = _resist_hidden.get(name + "_temp", 0)
-	# 強韌/精神/靈魂：從屬性自動計算
-	_data.fortitude = _data.calc_fortitude()
-	_data.spirit    = _data.calc_spirit()
-	_data.soul      = _data.calc_soul()
+		_data.attr_base[attr]  = int(_attr_inputs[attr+"_base"].text) if _attr_inputs[attr+"_base"].text.is_valid_int() else 13
+		_data.attr_bonus[attr] = _data.attr_modifier(attr)  # modifier 由 base 推算
+	# elem/phys/magic resists（user-editable base 值，StatEngine 會加上裝備加成）
 	_data.magic_resist    = int(_elem_resist_inputs["法抗"].text) if _elem_resist_inputs["法抗"].text.is_valid_int() else 0
 	_data.phys_resist     = int(_elem_resist_inputs["物抗"].text) if _elem_resist_inputs["物抗"].text.is_valid_int() else 0
 	_data.res_fire        = int(_elem_resist_inputs["火"].text)   if _elem_resist_inputs["火"].text.is_valid_int()   else 0
@@ -1100,50 +963,6 @@ func flush_to_data() -> void:
 	_data.res_dark        = int(_elem_resist_inputs["暗"].text)   if _elem_resist_inputs["暗"].text.is_valid_int()   else 0
 	# 裝備槽 / 道具庫：互動時已即時寫入 _data，無需額外回寫
 
-# ── 裝備加成計算 ──────────────────────────────────
-func _recalc_equip_stats() -> void:
-	if _data == null: return
-	var bonuses := AffixLibrary.calc_bonuses(_data.item_library, _data.equipment)
-
-	# 屬性加成 → attr_equip（_recalc_attr 會讀取 _attr_hidden）
-	for attr in CharacterData.ATTR_NAMES:
-		_attr_hidden[attr + "_equip"] = bonuses.get(attr, 0)
-		_recalc_attr(attr)
-
-	# HP / MP 加成
-	if bonuses.has("hp_bonus"):
-		_data.hp_bonus = bonuses.get("hp_bonus", 0)
-		_hp_inputs["bonus"].text = str(_data.hp_bonus)
-		_recalc_resource("hp")
-	if bonuses.has("mp_bonus"):
-		_data.mp_bonus = bonuses.get("mp_bonus", 0)
-		_mp_inputs["bonus"].text = str(_data.mp_bonus)
-		_recalc_resource("mp")
-
-	# 物抗 / 法抗
-	if bonuses.has("phys_resist"):
-		_data.phys_resist = bonuses.get("phys_resist", 0)
-		if _elem_resist_inputs.has("物抗"):
-			_elem_resist_inputs["物抗"].text = str(_data.phys_resist)
-	if bonuses.has("magic_resist"):
-		_data.magic_resist = bonuses.get("magic_resist", 0)
-		if _elem_resist_inputs.has("法抗"):
-			_elem_resist_inputs["法抗"].text = str(_data.magic_resist)
-
-	# 元素抗性
-	var elem_map := {
-		"res_fire": "火", "res_ice": "冰", "res_lightning": "電",
-		"res_acid": "酸", "res_sound": "音",
-	}
-	for sk in elem_map:
-		if bonuses.has(sk):
-			var ui_key: String = elem_map[sk]
-			if _elem_resist_inputs.has(ui_key):
-				_elem_resist_inputs[ui_key].text = str(bonuses.get(sk, 0))
-
-	# 移動力
-	if bonuses.has("combat_move"):
-		_data.combat_move = bonuses.get("combat_move", 0)
 
 # ── 輔助函式 ──────────────────────────────────────
 func _make_panel() -> PanelContainer:
