@@ -69,20 +69,26 @@ static func _collect_base(data: CharacterData, mods: Array) -> void:
 
 # ── 收集裝備加成 ──────────────────────────────────
 static func _collect_equipment(data: CharacterData, mods: Array) -> void:
-	var bonuses: Dictionary = AffixLibrary.calc_bonuses(data.item_library, data.equipment)
-	for sk in bonuses:
-		# 判定抗性：resist_抗毒素 → _resist_equip_抗毒素
-		if sk.begins_with("resist_"):
-			var resist_name: String = sk.trim_prefix("resist_")
-			_add(mods, "_resist_equip_" + resist_name, bonuses[sk], "equip")
+	var equip_mods: Array = AffixLibrary.collect_modifiers(data.item_library, data.equipment)
+	for mod: StatModifier in equip_mods:
+		# all_resist → 展開到所有判定抗性
+		if mod.stat_key == "all_resist":
+			for resist_name in CharacterData.RESIST_NAMES:
+				mods.append(StatModifier.new("_resist_equip_" + resist_name, mod.op, mod.value, "equip"))
+		# resist_X → 內部鍵 _resist_equip_X
+		elif mod.stat_key.begins_with("resist_"):
+			var resist_name: String = mod.stat_key.trim_prefix("resist_")
+			mods.append(StatModifier.new("_resist_equip_" + resist_name, mod.op, mod.value, "equip"))
 		else:
-			_add(mods, sk, bonuses[sk], "equip")
+			mods.append(mod)
 
 # ── 解析所有 Modifier → 最終數值 ─────────────────
 static func _resolve(data: CharacterData, mods: Array) -> Dictionary:
 	var adds:      Dictionary = {}
 	var multiplies: Dictionary = {}
 	var overrides: Dictionary = {}
+
+	var extra_skills: Dictionary = {}  # key -> count (int)
 
 	for mod: StatModifier in mods:
 		match mod.op:
@@ -93,6 +99,8 @@ static func _resolve(data: CharacterData, mods: Array) -> Dictionary:
 			StatModifier.Op.OVERRIDE:
 				if not overrides.has(mod.stat_key) or mod.value > overrides[mod.stat_key]:
 					overrides[mod.stat_key] = mod.value
+			StatModifier.Op.EXTRA_SKILL:
+				extra_skills[mod.stat_key] = extra_skills.get(mod.stat_key, 0) + int(mod.value)
 
 	var result: Dictionary = {}
 
@@ -166,6 +174,9 @@ static func _resolve(data: CharacterData, mods: Array) -> Dictionary:
 			result[k] = int(overrides[k])
 		else:
 			result[k] = int(float(adds.get(k, 0.0)) * float(multiplies.get(k, 1.0)))
+
+	# ── Step 6：額外技能／能力（EXTRA_SKILL）
+	result["extra_skills"] = extra_skills
 
 	return result
 

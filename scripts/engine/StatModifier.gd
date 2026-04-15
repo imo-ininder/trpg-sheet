@@ -4,9 +4,10 @@
 class_name StatModifier
 
 enum Op {
-	ADD,      ## 直接加算，最後 sum
-	MULTIPLY, ## 乘算，在 ADD 之後套用，product
-	OVERRIDE  ## 覆蓋，取最大值（最高優先權）
+	ADD,         ## 直接加算，最後 sum
+	MULTIPLY,    ## 乘算，在 ADD 之後套用，product
+	OVERRIDE,    ## 覆蓋，取最大值（最高優先權）
+	EXTRA_SKILL, ## 授予額外技能／能力，stat_key = 技能鍵, value = 使用次數上限
 }
 
 var stat_key: String  ## 對應的 stat 鍵值（例如 "STR", "hp_max", "phys_resist"）

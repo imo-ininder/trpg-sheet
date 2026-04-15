@@ -58,70 +58,56 @@ func load_from_json(path: String) -> void:
 
 	print("AffixLibrary: Loaded %d affixes from %s" % [_by_id.size(), path])
 
-# ── 計算裝備加成 ──────────────────────────────────
-## 傳入 item_library 和 equipment，回傳加總後的 stat bonuses
-## 格式：{ stat_key: total_value, ... }
-func calc_bonuses(item_library: Array, equipment: Dictionary) -> Dictionary:
-	var bonuses: Dictionary = {}
-
+# ── 裝備 StatModifier 收集 ────────────────────────
+## 傳入 item_library 和 equipment，回傳所有 StatModifier
+## 支援 ADD / MULTIPLY / OVERRIDE / EXTRA_SKILL 全類型
+func collect_modifiers(item_library: Array, equipment: Dictionary) -> Array:
+	var result: Array = []
 	for slot in equipment:
 		var item_id: String = equipment[slot]
-		if item_id == "":
-			continue
-
+		if item_id == "": continue
 		var item := _find_item_by_id(item_library, item_id)
-		if item.is_empty():
-			continue
-
-		for mod in item.get("mods", []):
-			var affix_id: String = mod.get("affix_id", "")
-			var cost: int = mod.get("cost", 0)
-
+		if item.is_empty(): continue
+		for mod_entry in item.get("mods", []):
+			var affix_id: String = mod_entry.get("affix_id", "")
+			var cost: int = mod_entry.get("cost", 0)
 			var affix := get_affix(affix_id)
 			if affix == null:
-				push_warning("Unknown affix: " + affix_id)
+				push_warning("AffixLibrary: unknown affix '%s'" % affix_id)
 				continue
-
 			var modifier = affix.get_modifier(cost)
-			if modifier == null:
-				continue
+			if modifier == null: continue
+			_collect_from_modifier(modifier, result, "equip")
+	return result
 
-			# 處理 modifier（可能是 dict 或 array）
-			_apply_modifier(modifier, bonuses)
-
-	return bonuses
-
-func _apply_modifier(modifier, bonuses: Dictionary) -> void:
+func _collect_from_modifier(modifier, result: Array, source: String) -> void:
 	if modifier is Array:
-		# 多 stat（如 堅韌）
-		for mod in modifier:
-			_apply_single_modifier(mod, bonuses)
+		for m in modifier:
+			_collect_single_mod(m, result, source)
 	elif modifier is Dictionary:
-		_apply_single_modifier(modifier, bonuses)
+		_collect_single_mod(modifier, result, source)
 
-func _apply_single_modifier(mod: Dictionary, bonuses: Dictionary) -> void:
+func _collect_single_mod(mod: Dictionary, result: Array, source: String) -> void:
 	var mod_type: String = mod.get("type", "add")
-
-	# Special type 不參與數值計算
-	if mod_type == "special":
-		return
-
-	var stat: String = mod.get("stat", "")
-	var value = mod.get("value", 0)
-
-	if stat == "":
-		return
-
-	# 目前只處理 add type（multiply/override 留給 StatEngine）
 	match mod_type:
 		"add":
-			bonuses[stat] = bonuses.get(stat, 0) + int(value)
+			var stat: String = mod.get("stat", "")
+			if stat != "":
+				result.append(StatModifier.new(stat, StatModifier.Op.ADD, float(mod.get("value", 0)), source))
 		"multiply":
-			# TODO: 乘算需要特殊處理
-			pass
+			var stat: String = mod.get("stat", "")
+			if stat != "":
+				result.append(StatModifier.new(stat, StatModifier.Op.MULTIPLY, float(mod.get("value", 1)), source))
 		"override":
-			# TODO: 覆蓋需要特殊處理
-			pass
+			var stat: String = mod.get("stat", "")
+			if stat != "":
+				result.append(StatModifier.new(stat, StatModifier.Op.OVERRIDE, float(mod.get("value", 0)), source))
+		"extra_skill":
+			var key: String = mod.get("key", "")
+			if key != "":
+				result.append(StatModifier.new(key, StatModifier.Op.EXTRA_SKILL, float(mod.get("count", 1)), source))
+		"special":
+			pass  # 純效果，不影響數值，略過
 
 func _find_item_by_id(library: Array, id: String) -> Dictionary:
 	for item in library:
