@@ -20,6 +20,9 @@ var _item_slot_opt: OptionButton        # slot key OptionButton
 var _item_mods_vb: VBoxContainer
 var _item_mod_rows: Array = []          # [{affix_opt, tier_opt, row}]
 var _item_viewer_label: RichTextLabel
+var _max_bonus_slider: HSlider
+var _max_bonus_val_lbl: Label
+var _budget_label: Label
 
 # ── 初始化 ────────────────────────────────────────
 func _ready() -> void:
@@ -168,6 +171,38 @@ func _build_editor_panel(parent: HBoxContainer) -> void:
 	_item_slot_opt.item_selected.connect(func(_i): _clear_mod_rows())
 	vb.add_child(_item_slot_opt)
 
+	# 上限加值
+	var mb_row = HBoxContainer.new()
+	mb_row.add_theme_constant_override("separation", 6)
+	mb_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vb.add_child(mb_row)
+	var mb_lbl = _small_label("上限加值")
+	mb_lbl.custom_minimum_size.x = 58
+	mb_row.add_child(mb_lbl)
+	_max_bonus_slider = HSlider.new()
+	_max_bonus_slider.min_value = 0
+	_max_bonus_slider.max_value = 18
+	_max_bonus_slider.step = 1
+	_max_bonus_slider.value = 0
+	_max_bonus_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_max_bonus_slider.value_changed.connect(func(v: float):
+		_max_bonus_val_lbl.text = str(int(v))
+		_rebuild_all_mod_row_opts()
+		_update_viewer()
+	)
+	mb_row.add_child(_max_bonus_slider)
+	_max_bonus_val_lbl = Label.new()
+	_max_bonus_val_lbl.text = "0"
+	_max_bonus_val_lbl.custom_minimum_size.x = 18
+	_max_bonus_val_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_max_bonus_val_lbl.add_theme_font_size_override("font_size", 12)
+	mb_row.add_child(_max_bonus_val_lbl)
+
+	_budget_label = Label.new()
+	_budget_label.text = "已用 0 / 0"
+	_budget_label.add_theme_font_size_override("font_size", 11)
+	vb.add_child(_budget_label)
+
 	# Mods
 	var mods_header = HBoxContainer.new()
 	mods_header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -315,7 +350,7 @@ func _add_mod_row(existing_mod) -> void:
 
 	_update_viewer()
 
-## 重算每個 mod 列的 affix 可選清單，排除其他列已選的；保留各列當前選擇
+## 重算每個 mod 列的 affix 可選清單，排除其他列已選的 + 超出預算的；保留各列當前選擇
 func _rebuild_all_mod_row_opts() -> void:
 	var slot_key := _current_slot_key()
 	var pool: Array = AffixLibrary.for_slot(slot_key) if slot_key != "" else AffixLibrary.all_affixes()
@@ -332,7 +367,7 @@ func _rebuild_all_mod_row_opts() -> void:
 		var tier_opt:  OptionButton = entry["tier_opt"]
 		var my_name: String = sel_names[i]
 
-		# 排除其他列已選的名稱
+		# 過濾：只排除其他列已選的 affix
 		var filtered: Array = pool.filter(func(a: AffixDef) -> bool:
 			for j in sel_names.size():
 				if j != i and sel_names[j] == a.affix_name:
@@ -349,14 +384,13 @@ func _rebuild_all_mod_row_opts() -> void:
 				new_sel = k
 		affix_opt.selected = new_sel if filtered.size() > 0 else -1
 
-		# 保留 tier 選擇並重建
+		# 重建 tier_opt，顯示所有 tier；盡量保留原本的 index
 		var prev_tier := tier_opt.selected
 		tier_opt.clear()
 		var affix := _affix_from_entry(entry)
 		if affix != null:
-			var costs := affix.get_all_costs()
-			for cost in costs:
-				tier_opt.add_item("+%d" % cost)
+			for c in affix.get_all_costs():
+				tier_opt.add_item("+%d" % c)
 			if prev_tier >= 0 and prev_tier < tier_opt.item_count:
 				tier_opt.selected = prev_tier
 
@@ -372,8 +406,17 @@ func _affix_from_entry(entry: Dictionary) -> AffixDef:
 			return affix
 	return null
 
-## 從當前編輯器狀態更新道具檢視
+## 從當前編輯器狀態更新道具檢視 + 預算狀態列
 func _update_viewer() -> void:
+	# 更新預算狀態列
+	if _budget_label != null:
+		var max_b := _get_max_bonus()
+		var used  := _get_used_cost()
+		var budget_text := "已用 %d / %d" % [used, max_b]
+		if used > max_b:
+			budget_text += "  ⚠ 超出上限！"
+		_budget_label.text = budget_text
+
 	if _item_viewer_label == null: return
 	var name_text := _item_name_edit.text.strip_edges() if _item_name_edit else ""
 	var slot_key := _current_slot_key()
@@ -389,9 +432,8 @@ func _update_viewer() -> void:
 			var affix := _affix_from_entry(entry)
 			if affix == null: continue
 			var tier_idx := tier_opt.selected
-			var costs := affix.get_all_costs()
-			if tier_idx < 0 or tier_idx >= costs.size(): continue
-			var cost: int = costs[tier_idx]
+			if tier_idx < 0 or tier_idx >= tier_opt.item_count: continue
+			var cost: int = affix.get_all_costs()[tier_idx]
 			var description: String = affix.get_description(cost)
 			lines.append("%s" % description)
 	_item_viewer_label.text = "\n\n".join(lines)
@@ -419,6 +461,22 @@ func _show_item_in_viewer(item: Dictionary) -> void:
 			var description: String = affix.get_description(cost)
 			lines.append("%s" % description)
 	_item_viewer_label.text = "\n\n".join(lines)
+
+func _get_max_bonus() -> int:
+	if _max_bonus_slider == null: return 18
+	return int(_max_bonus_slider.value)
+
+## 計算所有 mod 列的 cost 加總
+func _get_used_cost() -> int:
+	var total := 0
+	for entry in _item_mod_rows:
+		var affix: AffixDef = _affix_from_entry(entry)
+		if affix == null: continue
+		var tier_opt: OptionButton = entry["tier_opt"]
+		var tier_idx := tier_opt.selected
+		if tier_idx >= 0 and tier_idx < tier_opt.item_count:
+			total += affix.get_all_costs()[tier_idx]
+	return total
 
 func _current_slot_key() -> String:
 	if _item_slot_opt == null or _item_slot_opt.selected < 0: return ""
@@ -528,6 +586,10 @@ func _select_item(idx: int) -> void:
 			_item_slot_opt.selected = i
 			break
 
+	if _max_bonus_slider != null:
+		_max_bonus_slider.value = item.get("max_bonus", 0)
+		if _max_bonus_val_lbl != null:
+			_max_bonus_val_lbl.text = str(int(_max_bonus_slider.value))
 	_clear_mod_rows()
 	for mod in item.get("mods", []):
 		_add_mod_row(mod)
@@ -536,14 +598,12 @@ func _select_item(idx: int) -> void:
 func _generate_id() -> String:
 	return "item_%d_%d" % [Time.get_ticks_usec(), randi()]
 
-## 計算道具的顯示名稱：name (+總 cost)
+## 計算道具的顯示名稱：name (+加值上限)
 func _item_display_name(item: Dictionary) -> String:
 	var base_name: String = item.get("name", "（未命名）")
-	var total_cost := 0
-	for mod in item.get("mods", []):
-		total_cost += mod.get("cost", 0)
-	if total_cost > 0:
-		return "%s (+%d)" % [base_name, total_cost]
+	var max_bonus: int = item.get("max_bonus", 0)
+	if max_bonus > 0:
+		return "%s (+%d)" % [base_name, max_bonus]
 	return base_name
 
 ## 新增道具：從編輯器建立新道具並加入 item_library
@@ -557,9 +617,8 @@ func _create_new_item() -> void:
 		var affix := _affix_from_entry(entry)
 		if affix == null: continue
 		var tier_idx := tier_opt.selected
-		var costs := affix.get_all_costs()
-		if tier_idx >= 0 and tier_idx < costs.size():
-			var cost: int = costs[tier_idx]
+		if tier_idx >= 0 and tier_idx < tier_opt.item_count:
+			var cost: int = affix.get_all_costs()[tier_idx]
 			mods.append({"affix_id": affix.id, "cost": cost})
 
 	# 名稱：只儲存使用者輸入的部分，不帶 +N
@@ -569,7 +628,7 @@ func _create_new_item() -> void:
 		iname = type_label
 
 	var item_id := _generate_id()
-	var item := { "id": item_id, "name": iname, "slot": slot_key, "mods": mods }
+	var item := { "id": item_id, "name": iname, "slot": slot_key, "max_bonus": _get_max_bonus(), "mods": mods }
 	_data.item_library.append(item)
 	_selected_item_index = _data.item_library.size() - 1
 
@@ -592,9 +651,8 @@ func _save_item() -> void:
 		var affix := _affix_from_entry(entry)
 		if affix == null: continue
 		var tier_idx := tier_opt.selected
-		var costs := affix.get_all_costs()
-		if tier_idx >= 0 and tier_idx < costs.size():
-			var cost: int = costs[tier_idx]
+		if tier_idx >= 0 and tier_idx < tier_opt.item_count:
+			var cost: int = affix.get_all_costs()[tier_idx]
 			mods.append({"affix_id": affix.id, "cost": cost})
 
 	# 名稱：只儲存使用者輸入的部分，不帶 +N
@@ -605,7 +663,7 @@ func _save_item() -> void:
 
 	# 保留既有 id
 	var existing_id: String = _data.item_library[_selected_item_index].get("id", "")
-	var item := { "id": existing_id, "name": iname, "slot": slot_key, "mods": mods }
+	var item := { "id": existing_id, "name": iname, "slot": slot_key, "max_bonus": _get_max_bonus(), "mods": mods }
 	_data.item_library[_selected_item_index] = item
 
 	_refresh_item_list()
@@ -615,10 +673,13 @@ func _save_item() -> void:
 ## 重置編輯器到初始狀態
 func _clear_editor() -> void:
 	_selected_item_index = -1
-	if _item_name_edit: _item_name_edit.text = ""
-	if _item_slot_opt:  _item_slot_opt.selected = 0  # 重置為第一個（武器）
+	if _item_name_edit:      _item_name_edit.text = ""
+	if _item_slot_opt:       _item_slot_opt.selected = 0
+	if _max_bonus_slider != null:
+		_max_bonus_slider.value = 0
+		if _max_bonus_val_lbl != null: _max_bonus_val_lbl.text = "0"
 	_clear_mod_rows()
-	_update_viewer()  # 清空檢視面板
+	_update_viewer()
 
 func _delete_item() -> void:
 	if _data == null or _selected_item_index < 0: return
