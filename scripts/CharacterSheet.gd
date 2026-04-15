@@ -58,7 +58,7 @@ func _build_ui() -> void:
 	_build_pages(root)
 
 var _page_char: VBoxContainer
-var _page_equip: VBoxContainer
+var _page_equip: HBoxContainer
 var _equip_tab_panel: EquipTabPanel
 var _special_abilities_label: RichTextLabel
 
@@ -69,8 +69,8 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_page_char.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	parent.add_child(_page_char)
 
-	_page_equip = VBoxContainer.new()
-	_page_equip.add_theme_constant_override("separation", 8)
+	_page_equip = HBoxContainer.new()
+	_page_equip.add_theme_constant_override("separation", 12)
 	_page_equip.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_page_equip.size_flags_vertical   = Control.SIZE_EXPAND_FILL
 	_page_equip.visible = false
@@ -80,6 +80,7 @@ func _build_pages(parent: VBoxContainer) -> void:
 	_build_skill_row(_page_char)
 
 	_equip_tab_panel = EquipTabPanel.new()
+	_equip_tab_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_equip_tab_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_page_equip.add_child(_equip_tab_panel)
 	_equip_tab_panel.equip_changed.connect(_recompute)
@@ -862,6 +863,28 @@ func _update_skill_scroll_height(cat: String) -> void:
 		# 初始化階段，先設定為需要的高度
 		scroll.custom_minimum_size.y = needed_height
 
+# ── 特殊能力區塊（右側垂直）─────────────────────
+func _build_special_abilities_section(parent: HBoxContainer) -> void:
+	var panel = _make_panel()
+	panel.custom_minimum_size.x = 280
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	parent.add_child(panel)
+
+	var vb = _panel_vbox(panel, "特殊能力")
+
+	var scroll = ScrollContainer.new()
+	scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	vb.add_child(scroll)
+
+	_special_abilities_label = RichTextLabel.new()
+	_special_abilities_label.bbcode_enabled = true
+	_special_abilities_label.fit_content = true
+	_special_abilities_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_special_abilities_label.add_theme_font_size_override("normal_font_size", 12)
+	scroll.add_child(_special_abilities_label)
+
 # ── Stat Engine 整合 ──────────────────────────────
 ## 單一計算入口：flush → StatEngine.compute → _apply_stats
 func _recompute() -> void:
@@ -869,6 +892,7 @@ func _recompute() -> void:
 	flush_to_data()
 	var stats := StatEngine.compute(_data)
 	_apply_stats(stats)
+	_update_special_abilities()
 
 ## 將 StatEngine 輸出寫入所有唯讀顯示元件
 func _apply_stats(stats: Dictionary) -> void:
@@ -897,6 +921,47 @@ func _apply_stats(stats: Dictionary) -> void:
 	if _soul_labels.has("精神"): _soul_labels["精神"].text = str(stats.get("spirit",    0))
 	if _soul_labels.has("靈魂"): _soul_labels["靈魂"].text = str(stats.get("soul",      0))
 
+## 更新特殊能力顯示（只顯示 affixes 描述，垂直列表）
+func _update_special_abilities() -> void:
+	if _data == null or _special_abilities_label == null:
+		return
+
+	var descriptions: Array = []
+
+	# 遍歷所有裝備槽
+	for slot in _data.equipment:
+		var item_id: String = _data.equipment[slot]
+		if item_id == "":
+			continue
+
+		# 找到對應道具
+		var item: Dictionary = {}
+		for it in _data.item_library:
+			if it.get("id", "") == item_id:
+				item = it
+				break
+
+		if item.is_empty():
+			continue
+
+		# 檢查每個 mod 是否為 special
+		for mod in item.get("mods", []):
+			var affix_id: String = mod.get("affix_id", "")
+			var cost: int = mod.get("cost", 0)
+
+			var affix := AffixLibrary.get_affix(affix_id)
+			if affix == null:
+				continue
+
+			if affix.is_special(cost):
+				var description := affix.get_description(cost)
+				descriptions.append(description)
+
+	# 組裝顯示文字（只顯示 description，垂直列表）
+	if descriptions.is_empty():
+		_special_abilities_label.text = "[color=gray][i]（無）[/i][/color]"
+	else:
+		_special_abilities_label.text = "\n\n".join(descriptions)
 
 # ── 資料載入 / 回寫 ───────────────────────────────
 func load_data(data: CharacterData) -> void:
